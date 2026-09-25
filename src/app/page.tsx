@@ -31,7 +31,8 @@ export default function Home() {
     resetFilters, 
     openPostModal, 
     selectedUniversityId, 
-    filters 
+    filters,
+    currentUser
   } = useMarket();
 
   const selectedUni = UNIVERSITIES.find((u) => u.id === selectedUniversityId);
@@ -81,7 +82,7 @@ export default function Home() {
 
         {/* Product Grid or Empty State */}
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {filteredItems.map((item) => (
               <ProductCard key={item.id} item={item} />
             ))}
@@ -125,15 +126,17 @@ export default function Home() {
       </main>
 
       {/* Floating Action Button for Mobile */}
-      <div className="lg:hidden fixed bottom-5 right-5 z-40">
-        <button
-          onClick={openPostModal}
-          className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-xs rounded-full shadow-xl shadow-emerald-900/30 border border-emerald-400/40 active:scale-95 transition-transform"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>Post Item</span>
-        </button>
-      </div>
+      {currentUser && (
+        <div className="lg:hidden fixed bottom-5 right-5 z-40">
+          <button
+            onClick={openPostModal}
+            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-xs rounded-full shadow-xl shadow-emerald-900/30 border border-emerald-400/40 active:scale-95 transition-transform"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>Post Item</span>
+          </button>
+        </div>
+      )}
 
       {/* All Application Modals */}
       <ProductModal />

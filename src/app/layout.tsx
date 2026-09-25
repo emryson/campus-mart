@@ -1,18 +1,18 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, JetBrains_Mono, Raleway } from 'next/font/google';
+import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { MarketProvider } from '@/context/MarketContext';
 
-const cormorant = Cormorant_Garamond({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
-  variable: '--font-display',
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-heading',
   display: 'swap',
 });
 
-const raleway = Raleway({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 });
@@ -43,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${raleway.variable} ${jetBrainsMono.variable}`}>
+    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} ${jetBrainsMono.variable}`}>
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
         <MarketProvider>
           {children}

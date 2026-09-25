@@ -75,6 +75,8 @@
   --campus-border: #d6d3d1;
   --campus-bg: #fffbeb;
   --campus-card: #ffffff;
+  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @layer base {
@@ -85,7 +87,7 @@
     background-color: var(--campus-bg);
     color: #1c1917;
     letter-spacing: 0.02em;
-    font-family: var(--font-body, sans-serif);
+    font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -95,7 +97,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-display, var(--font-body, sans-serif));
+    font-family: var(--font-heading, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     letter-spacing: -0.02em;
     font-weight: 500;
   }

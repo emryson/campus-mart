@@ -59,7 +59,6 @@ const DEFAULT_FILTERS: FilterState = {
 
 const MarketContext = createContext<MarketContextType | undefined>(undefined);
 
-const STORAGE_KEY_ITEMS = 'campus_mart_items_v2';
 const STORAGE_KEY_SAVED = 'campus_mart_saved_v2';
 
 interface AuthResult {
@@ -89,17 +88,19 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     const loadState = async () => {
     try {
-      const storedItems = localStorage.getItem(STORAGE_KEY_ITEMS);
-      if (storedItems) {
-        const parsed = JSON.parse(storedItems);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setItems(parsed);
-        }
-      }
       const storedSaved = localStorage.getItem(STORAGE_KEY_SAVED);
       if (storedSaved) {
         setSavedItemIds(JSON.parse(storedSaved));
       }
+
+      const listingsResponse = await fetch('/api/listings', { cache: 'no-store' });
+      if (listingsResponse.ok) {
+        const listingsData = await listingsResponse.json();
+        if (Array.isArray(listingsData.listings) && listingsData.listings.length > 0) {
+          setItems(listingsData.listings);
+        }
+      }
+
       const sessionResponse = await fetch('/api/auth/me', { cache: 'no-store' });
       if (sessionResponse.ok) {
         const sessionData = await sessionResponse.json();
@@ -114,16 +115,6 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     void loadState();
   }, []);
-
-  // Save items to LocalStorage
-  useEffect(() => {
-    if (!isLoaded) return;
-    try {
-      localStorage.setItem(STORAGE_KEY_ITEMS, JSON.stringify(items));
-    } catch (err) {
-      console.error('Failed to persist items:', err);
-    }
-  }, [items, isLoaded]);
 
   // Save saved IDs
   useEffect(() => {
@@ -242,7 +233,39 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     setItems((prev) => [newItem, ...prev]);
-    recordActivity('listing_created', { itemId: newItem.id, category: newItem.category });
+
+    void fetch('/api/listings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...newItem,
+        seller: newItem.seller,
+        price: newItem.price,
+        isNegotiable: newItem.isNegotiable,
+        universityId: newItem.universityId,
+        universityName: newItem.universityName,
+        meetupSpot: newItem.meetupSpot,
+        sellerName: newItem.seller.name,
+        sellerPhone: newItem.seller.phone,
+        sellerWhatsappNumber: newItem.seller.whatsappNumber,
+        sellerUniversity: newItem.seller.university,
+        sellerHostelOrHall: newItem.seller.hostelOrHall,
+        sellerRoomOrSpot: newItem.seller.roomOrSpot,
+        sellerStudentIdVerified: newItem.seller.studentIdVerified,
+        sellerAvatarUrl: newItem.seller.avatarUrl,
+      }),
+    }).then(async (response) => {
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error || 'Unable to save listing.');
+      }
+
+      setItems((prev) => [payload.listing, ...prev.filter((listing) => listing.id !== newItem.id)]);
+      recordActivity('listing_created', { itemId: payload.listing.id, category: payload.listing.category });
+    }).catch((error) => {
+      console.error('Failed to create listing on server:', error);
+    });
+
     return newItem;
   };
 

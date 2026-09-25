@@ -52,10 +52,30 @@ export const ProductModal: React.FC = () => {
     setActiveImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  const handleShare = () => {
-    navigator.clipboard?.writeText(window.location.href);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      // Fallback for clipboard API failures
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2000);
+      } catch (fallbackError) {
+        console.error('Fallback copy failed:', fallbackError);
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   // WhatsApp link with customized Ghanaian campus trade message
@@ -72,10 +92,10 @@ export const ProductModal: React.FC = () => {
         className="relative bg-white w-full max-w-4xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header bar */}
-        <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-slate-100 bg-slate-50/70">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">
+        {/* Header bar - Sticky on mobile */}
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-slate-100 bg-slate-50/70 backdrop-blur-md">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200 truncate">
               {activeItem.universityName}
             </span>
             <span className="text-xs text-slate-500 hidden sm:inline">•</span>
@@ -84,7 +104,7 @@ export const ProductModal: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             {/* Share */}
             <button
               onClick={handleShare}
@@ -194,6 +214,92 @@ export const ProductModal: React.FC = () => {
                 </div>
               )}
 
+              {/* Seller Information & Contact Buttons */}
+              <div className="space-y-3 pt-2 border-t border-slate-200">
+                {/* Seller mini profile */}
+                <div className="flex items-center justify-between bg-slate-100/70 p-3 rounded-xl border border-slate-200">
+                  <div className="flex items-center gap-2.5">
+                    {activeItem.seller.avatarUrl ? (
+                      <img
+                        src={activeItem.seller.avatarUrl}
+                        alt={activeItem.seller.name}
+                        className="w-10 h-10 rounded-full object-cover border border-emerald-500"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold text-sm flex items-center justify-center">
+                        {activeItem.seller.name.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-sm text-slate-900">{activeItem.seller.name}</span>
+                        {activeItem.seller.studentIdVerified && (
+                          <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded-full">
+                            <CheckCircle className="w-3 h-3 text-emerald-600" />
+                            Verified Student
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-slate-500">
+                        {activeItem.seller.hostelOrHall} • {activeItem.seller.university}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Primary Contact Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {/* WhatsApp */}
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
+                  >
+                    <MessageSquare className="w-4 h-4 fill-white" />
+                    <span>Chat on WhatsApp</span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                  </a>
+
+                  {/* Phone Call */}
+                  <a
+                    href={`tel:${activeItem.seller.phone}`}
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>Call ({activeItem.seller.phone})</span>
+                  </a>
+                </div>
+
+                {/* Manage if user is creator */}
+                {currentUser && (currentUser.role === 'admin' || (activeItem.isCustomUserPost && activeItem.ownerId === currentUser.id)) && (
+                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                    <button
+                      onClick={() => toggleSoldStatus(activeItem.id)}
+                      className={`px-3 py-1.5 rounded-lg font-bold border transition-colors ${
+                        activeItem.isSold
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                          : 'bg-amber-100 text-amber-800 border-amber-300'
+                      }`}
+                    >
+                      {activeItem.isSold ? 'Mark as Available' : 'Mark as Sold'}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (confirm('Are you sure you want to delete this listing?')) {
+                          deleteItem(activeItem.id);
+                        }
+                      }}
+                      className="text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Listing</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Safety notice banner right below photos */}
               <div className="bg-amber-50/80 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 text-xs text-amber-900">
                 <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
@@ -207,7 +313,7 @@ export const ProductModal: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Pricing, Location, Description, Seller Contact */}
+            {/* Right Column: Pricing, Location, Description */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-5">
               <div className="space-y-4">
                 {/* Title */}
@@ -305,95 +411,20 @@ export const ProductModal: React.FC = () => {
                   </div>
                 )}
               </div>
-
-              {/* Seller Information & Actions */}
-              <div className="space-y-3 pt-3 border-t border-slate-200">
-                {/* Seller mini profile */}
-                <div className="flex items-center justify-between bg-slate-100/70 p-3 rounded-xl border border-slate-200">
-                  <div className="flex items-center gap-2.5">
-                    {activeItem.seller.avatarUrl ? (
-                      <img
-                        src={activeItem.seller.avatarUrl}
-                        alt={activeItem.seller.name}
-                        className="w-10 h-10 rounded-full object-cover border border-emerald-500"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold text-sm flex items-center justify-center">
-                        {activeItem.seller.name.charAt(0)}
-                      </div>
-                    )}
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-sm text-slate-900">{activeItem.seller.name}</span>
-                        {activeItem.seller.studentIdVerified && (
-                          <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded-full">
-                            <CheckCircle className="w-3 h-3 text-emerald-600" />
-                            Verified Student
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[11px] text-slate-500">
-                        {activeItem.seller.hostelOrHall} • {activeItem.seller.university}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Primary Contact Buttons */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {/* WhatsApp */}
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
-                  >
-                    <MessageSquare className="w-4 h-4 fill-white" />
-                    <span>Chat on WhatsApp</span>
-                    <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-                  </a>
-
-                  {/* Phone Call */}
-                  <a
-                    href={`tel:${activeItem.seller.phone}`}
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
-                  >
-                    <Phone className="w-4 h-4" />
-                    <span>Call ({activeItem.seller.phone})</span>
-                  </a>
-                </div>
-
-                {/* Manage if user is creator */}
-                {currentUser && (currentUser.role === 'admin' || (activeItem.isCustomUserPost && activeItem.ownerId === currentUser.id)) && (
-                  <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
-                    <button
-                      onClick={() => toggleSoldStatus(activeItem.id)}
-                      className={`px-3 py-1.5 rounded-lg font-bold border transition-colors ${
-                        activeItem.isSold
-                          ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                          : 'bg-amber-100 text-amber-800 border-amber-300'
-                      }`}
-                    >
-                      {activeItem.isSold ? 'Mark as Available' : 'Mark as Sold'}
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        if (confirm('Are you sure you want to delete this listing?')) {
-                          deleteItem(activeItem.id);
-                        }
-                      }}
-                      className="text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      <span>Delete Listing</span>
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
 
           </div>
+        </div>
+
+        {/* Mobile Close Button - Sticky at bottom */}
+        <div className="lg:hidden sticky bottom-0 bg-white border-t border-slate-200 p-3 z-10">
+          <button
+            onClick={() => setActiveItem(null)}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 text-white font-bold text-sm rounded-xl shadow-lg"
+          >
+            <X className="w-4 h-4" />
+            <span>Close Product Details</span>
+          </button>
         </div>
       </div>
     </div>

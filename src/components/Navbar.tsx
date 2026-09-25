@@ -120,7 +120,7 @@ export const Navbar: React.FC = () => {
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900">
+              <span className="font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight text-slate-900">
                 Campus<span className="text-emerald-600">Mart</span>
               </span>
               <span className="hidden sm:inline bg-amber-100 text-amber-800 font-bold text-[10px] px-1.5 py-0.5 rounded tracking-wide uppercase border border-amber-200">
@@ -268,13 +268,15 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile quick actions & toggle */}
         <div className="flex lg:hidden items-center gap-2">
-          <button
-            onClick={openPostModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-full shadow-sm"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Post</span>
-          </button>
+          {currentUser && (
+            <button
+              onClick={openPostModal}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-full shadow-sm"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Post</span>
+            </button>
+          )}
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

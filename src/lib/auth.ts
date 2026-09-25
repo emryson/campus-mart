@@ -3,7 +3,11 @@ import bcrypt from 'bcryptjs';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { StudentUser } from '@/types/market';
+import { INITIAL_CAMPUS_ITEMS } from '@/data/mockItems';
+import { listingToCampusItem, normalizeListingInput, type NormalizedListingInput } from '@/lib/listings';
+import type { CampusItem, StudentUser } from '@/types/market';
+
+export { normalizeListingInput } from '@/lib/listings';
 
 const databaseDirectory = path.join(process.cwd(), 'data');
 const databasePath = process.env.DATABASE_PATH || path.join(databaseDirectory, 'campus-mart.db');
@@ -32,6 +36,36 @@ type UserRow = {
 type SessionRow = {
   user_id: string;
   expires_at: string;
+};
+
+type ListingRow = {
+  id: string;
+  title: string;
+  category: string;
+  price: number;
+  is_negotiable: number;
+  university_id: string;
+  university_name: string;
+  location: string;
+  meetup_spot: string | null;
+  description: string;
+  word_count: number;
+  condition: string;
+  images: string | null;
+  seller_name: string;
+  seller_phone: string;
+  seller_whatsapp_number: string;
+  seller_university: string;
+  seller_hostel_or_hall: string;
+  seller_room_or_spot: string | null;
+  seller_student_id_verified: number;
+  seller_avatar_url: string | null;
+  created_at: string;
+  is_sold: number;
+  views: number;
+  featured: number;
+  is_custom_user_post: number;
+  owner_id: string | null;
 };
 
 declare global {
@@ -79,9 +113,42 @@ database.exec(`
     created_at TEXT NOT NULL
   );
 
+  CREATE TABLE IF NOT EXISTS listings (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    category TEXT NOT NULL,
+    price REAL NOT NULL,
+    is_negotiable INTEGER NOT NULL DEFAULT 0,
+    university_id TEXT NOT NULL,
+    university_name TEXT NOT NULL,
+    location TEXT NOT NULL,
+    meetup_spot TEXT,
+    description TEXT NOT NULL,
+    word_count INTEGER NOT NULL DEFAULT 0,
+    condition TEXT NOT NULL,
+    images TEXT NOT NULL,
+    seller_name TEXT NOT NULL,
+    seller_phone TEXT NOT NULL,
+    seller_whatsapp_number TEXT NOT NULL,
+    seller_university TEXT NOT NULL,
+    seller_hostel_or_hall TEXT NOT NULL,
+    seller_room_or_spot TEXT,
+    seller_student_id_verified INTEGER NOT NULL DEFAULT 0,
+    seller_avatar_url TEXT,
+    created_at TEXT NOT NULL,
+    is_sold INTEGER NOT NULL DEFAULT 0,
+    views INTEGER NOT NULL DEFAULT 0,
+    featured INTEGER NOT NULL DEFAULT 0,
+    is_custom_user_post INTEGER NOT NULL DEFAULT 0,
+    owner_id TEXT REFERENCES users(id) ON DELETE SET NULL
+  );
+
   CREATE INDEX IF NOT EXISTS sessions_user_id_idx ON sessions(user_id);
   CREATE INDEX IF NOT EXISTS activities_user_id_idx ON activities(user_id);
   CREATE INDEX IF NOT EXISTS activities_created_at_idx ON activities(created_at);
+  CREATE INDEX IF NOT EXISTS listings_owner_id_idx ON listings(owner_id);
+  CREATE INDEX IF NOT EXISTS listings_university_id_idx ON listings(university_id);
+  CREATE INDEX IF NOT EXISTS listings_created_at_idx ON listings(created_at);
 `);
 
 try {
@@ -109,6 +176,137 @@ const toStudentUser = (row: UserRow): StudentUser => ({
 
 const getUserById = (id: string) => {
   return database.prepare('SELECT * FROM users WHERE id = ?').get(id) as UserRow | undefined;
+};
+
+const seedDefaultListings = () => {
+  const listingCount = database.prepare('SELECT COUNT(*) AS count FROM listings').get() as { count: number };
+  if (listingCount.count > 0) return;
+
+  for (const item of INITIAL_CAMPUS_ITEMS) {
+    database.prepare(`
+      INSERT INTO listings (
+        id, title, category, price, is_negotiable, university_id, university_name,
+        location, meetup_spot, description, word_count, condition, images,
+        seller_name, seller_phone, seller_whatsapp_number, seller_university,
+        seller_hostel_or_hall, seller_room_or_spot, seller_student_id_verified,
+        seller_avatar_url, created_at, is_sold, views, featured,
+        is_custom_user_post, owner_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      item.id,
+      item.title,
+      item.category,
+      item.price,
+      item.isNegotiable ? 1 : 0,
+      item.universityId,
+      item.universityName,
+      item.location,
+      item.meetupSpot || null,
+      item.description,
+      item.wordCount ?? item.description.split(/\s+/).filter(Boolean).length,
+      item.condition,
+      JSON.stringify(item.images),
+      item.seller.name,
+      item.seller.phone,
+      item.seller.whatsappNumber,
+      item.seller.university,
+      item.seller.hostelOrHall,
+      item.seller.roomOrSpot || null,
+      item.seller.studentIdVerified ? 1 : 0,
+      item.seller.avatarUrl || null,
+      item.createdAt,
+      item.isSold ? 1 : 0,
+      item.views ?? 0,
+      item.featured ? 1 : 0,
+      item.isCustomUserPost ? 1 : 0,
+      item.ownerId || null,
+    );
+  }
+};
+
+export const listListings = (): CampusItem[] => {
+  seedDefaultListings();
+
+  const rows = database.prepare('SELECT * FROM listings ORDER BY datetime(created_at) DESC').all() as ListingRow[];
+  return rows.map((row) => listingToCampusItem(row));
+};
+
+export const createListingRecord = (ownerUserId: string, input: NormalizedListingInput): CampusItem => {
+  const listingId = `item-${crypto.randomUUID()}`;
+  const createdAt = new Date().toISOString();
+  const listing: CampusItem = {
+    id: listingId,
+    title: input.title,
+    category: input.category,
+    price: input.price,
+    isNegotiable: input.isNegotiable,
+    universityId: input.universityId,
+    universityName: input.universityName,
+    location: input.location,
+    meetupSpot: input.meetupSpot || undefined,
+    description: input.description,
+    wordCount: input.wordCount,
+    condition: input.condition,
+    images: input.images,
+    seller: input.seller,
+    createdAt,
+    isSold: false,
+    views: 1,
+    featured: false,
+    isCustomUserPost: true,
+    ownerId: ownerUserId,
+  };
+
+  database.prepare(`
+    INSERT INTO listings (
+      id, title, category, price, is_negotiable, university_id, university_name,
+      location, meetup_spot, description, word_count, condition, images,
+      seller_name, seller_phone, seller_whatsapp_number, seller_university,
+      seller_hostel_or_hall, seller_room_or_spot, seller_student_id_verified,
+      seller_avatar_url, created_at, is_sold, views, featured,
+      is_custom_user_post, owner_id
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    listing.id,
+    listing.title,
+    listing.category,
+    listing.price,
+    listing.isNegotiable ? 1 : 0,
+    listing.universityId,
+    listing.universityName,
+    listing.location,
+    listing.meetupSpot || null,
+    listing.description,
+    listing.wordCount,
+    listing.condition,
+    JSON.stringify(listing.images),
+    listing.seller.name,
+    listing.seller.phone,
+    listing.seller.whatsappNumber,
+    listing.seller.university,
+    listing.seller.hostelOrHall,
+    listing.seller.roomOrSpot || null,
+    listing.seller.studentIdVerified ? 1 : 0,
+    listing.seller.avatarUrl || null,
+    listing.createdAt,
+    listing.isSold ? 1 : 0,
+    listing.views ?? 0,
+    listing.featured ? 1 : 0,
+    listing.isCustomUserPost ? 1 : 0,
+    listing.ownerId || null,
+  );
+
+  return listing;
+};
+
+export const deleteListingRecord = (listingId: string) => {
+  const result = database.prepare('DELETE FROM listings WHERE id = ?').run(listingId);
+  return result.changes > 0;
+};
+
+export const getListingById = (listingId: string): CampusItem | undefined => {
+  const row = database.prepare('SELECT * FROM listings WHERE id = ?').get(listingId) as ListingRow | undefined;
+  return row ? listingToCampusItem(row) : undefined;
 };
 
 export const createUser = (input: {

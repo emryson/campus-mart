@@ -6,16 +6,27 @@ import { useMarket } from '@/context/MarketContext';
 import { UNIVERSITIES } from '@/data/universities';
 
 export const HeroBanner: React.FC = () => {
-  const { openPostModal, openSafetyModal, selectedUniversityId } = useMarket();
+  const { openPostModal, openSafetyModal, selectedUniversityId, currentUser } = useMarket();
   const currentUni = UNIVERSITIES.find((u) => u.id === selectedUniversityId);
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white py-8 sm:py-10 md:py-14 px-4 sm:px-8 border-b border-emerald-900/40">
-      {/* Subtle background glow effect */}
-      <div className="absolute top-0 right-1/4 -mt-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 left-1/3 -mb-12 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="relative overflow-hidden text-white py-8 sm:py-10 md:py-14 px-4 sm:px-8 border-b border-emerald-900/40">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&q=80"
+          alt="Campus students studying together"
+          className="w-full h-full object-cover"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-emerald-950/85 to-slate-900/90"></div>
+      </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      {/* Subtle background glow effect */}
+      <div className="absolute top-0 right-1/4 -mt-12 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none z-10"></div>
+      <div className="absolute bottom-0 left-1/3 -mb-12 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none z-10"></div>
+
+      <div className="max-w-7xl mx-auto relative z-20">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           {/* Left Column: Headline & Subheadline */}
           <div className="max-w-2xl space-y-4">
@@ -43,13 +54,15 @@ export const HeroBanner: React.FC = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-              <button
-                onClick={openPostModal}
-                className="flex items-center justify-center gap-2 px-5 py-3 min-h-12 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5"
-              >
-                <PlusCircle className="w-4 h-4 text-slate-950" />
-                <span>Sell an Item on Campus</span>
-              </button>
+              {currentUser && (
+                <button
+                  onClick={openPostModal}
+                  className="flex items-center justify-center gap-2 px-5 py-3 min-h-12 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5"
+                >
+                  <PlusCircle className="w-4 h-4 text-slate-950" />
+                  <span>Sell an Item on Campus</span>
+                </button>
+              )}
 
               <button
                 onClick={openSafetyModal}
