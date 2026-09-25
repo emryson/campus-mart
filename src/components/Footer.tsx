@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { ShoppingBag, ShieldCheck, Heart, GraduationCap } from 'lucide-react';
+import Image from 'next/image';
+import { ShieldCheck, Heart, GraduationCap } from 'lucide-react';
 import { UNIVERSITIES } from '@/data/universities';
 import { useMarket } from '@/context/MarketContext';
 import { UniversityId } from '@/types/market';
@@ -16,8 +17,8 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div className="space-y-3 md:col-span-1">
             <div className="flex items-center gap-2 text-white">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4" />
+              <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0">
+                <Image src="/images/logo.png" alt="CampusMart logo" fill sizes="32px" className="object-contain" />
               </div>
               <span className="font-extrabold text-base tracking-tight">
                 Campus<span className="text-emerald-400">Mart</span> Ghana

@@ -16,7 +16,7 @@ export const SafetyModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-emerald-950 text-white">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-slate-100 bg-emerald-950 text-white">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center">
               <ShieldCheck className="w-5 h-5" />
@@ -36,7 +36,7 @@ export const SafetyModal: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-6 space-y-5 text-slate-700 text-xs sm:text-sm">
+        <div className="overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5 text-slate-700 text-xs sm:text-sm">
           {/* Rule 1: Public Meetup */}
           <div className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
             <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
@@ -97,7 +97,7 @@ export const SafetyModal: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
+        <div className="px-4 sm:px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-end">
           <button
             onClick={closeSafetyModal}
             className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"

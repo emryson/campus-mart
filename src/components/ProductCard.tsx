@@ -33,7 +33,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
   return (
     <div
       onClick={() => setActiveItem(item)}
-      className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer relative card-hover"
+      onTouchEnd={() => setActiveItem(item)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          setActiveItem(item);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer relative card-hover focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
     >
       {/* Top Image Container */}
       <div className="relative aspect-[4/3] w-full bg-slate-100 overflow-hidden">
@@ -71,6 +80,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
               e.stopPropagation();
               toggleSaveItem(item.id);
             }}
+            onTouchEnd={(e) => e.stopPropagation()}
             className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
               saved
                 ? 'bg-emerald-600 text-white hover:bg-emerald-700 scale-105'
@@ -159,9 +169,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
             )}
           </div>
 
-          <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-            Details <ArrowRight className="w-3 h-3" />
-          </span>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setActiveItem(item);
+            }}
+            className="min-h-10 flex-1 justify-center text-[11px] text-white bg-emerald-600 hover:bg-emerald-700 font-bold rounded-lg px-3 flex items-center gap-1 transition-colors"
+          >
+            View details <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </div>

@@ -32,9 +32,9 @@ export const FilterToolbar: React.FC = () => {
   return (
     <div className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Left: Results count & Quick Toggles */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-xs font-bold text-slate-700">
               <span className="text-emerald-700 font-extrabold text-sm">{filteredItems.length}</span>{' '}
               {filteredItems.length === 1 ? 'item available' : 'items available'}
@@ -85,7 +85,7 @@ export const FilterToolbar: React.FC = () => {
           </div>
 
           {/* Right: Sort By */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
             <label htmlFor="sort-by-select" className="text-xs text-slate-500 font-medium">
               Sort:
             </label>
@@ -93,7 +93,7 @@ export const FilterToolbar: React.FC = () => {
               id="sort-by-select"
               value={filters.sortBy}
               onChange={(e) => updateFilter('sortBy', e.target.value as any)}
-              className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+              className="min-w-0 flex-1 sm:flex-none text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2 text-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
             >
               <option value="newest">Recently Posted</option>
               <option value="price-asc">Price: Low to High (GH₵)</option>

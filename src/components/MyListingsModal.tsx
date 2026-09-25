@@ -5,33 +5,38 @@ import { X, Layers, PlusCircle, Trash2, CheckCircle2, RefreshCw, Eye } from 'luc
 import { useMarket } from '@/context/MarketContext';
 
 export const MyListingsModal: React.FC = () => {
-  const { 
-    isMyListingsModalOpen, 
-    closeMyListingsModal, 
-    myListings, 
+  const {
+    isMyListingsModalOpen,
+    closeMyListingsModal,
+    myListings,
     openPostModal,
-    deleteItem, 
-    toggleSoldStatus, 
-    setActiveItem 
+    deleteItem,
+    toggleSoldStatus,
+    setActiveItem,
+    currentUser,
   } = useMarket();
 
   if (!isMyListingsModalOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div 
+      <div
         className="relative bg-white w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 flex flex-col max-h-[85vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-slate-100 bg-slate-50/80">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900">My Campus Listings</h2>
-              <p className="text-xs text-slate-500">Items you have posted for sale on campus</p>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                {currentUser?.role === 'admin' ? 'Listing Moderation' : 'My Campus Listings'}
+              </h2>
+              <p className="text-xs text-slate-500">
+                {currentUser?.role === 'admin' ? 'Review and remove listings from any user' : 'Items you have posted for sale on campus'}
+              </p>
             </div>
           </div>
 
@@ -57,7 +62,7 @@ export const MyListingsModal: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-5 space-y-3">
+        <div className="overflow-y-auto p-4 sm:p-5 space-y-3">
           {myListings.length === 0 ? (
             <div className="text-center py-12 space-y-3">
               <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
@@ -84,7 +89,7 @@ export const MyListingsModal: React.FC = () => {
                 key={item.id}
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-all"
               >
-                <div 
+                <div
                   onClick={() => {
                     closeMyListingsModal();
                     setActiveItem(item);
@@ -136,11 +141,10 @@ export const MyListingsModal: React.FC = () => {
                   {/* Toggle sold */}
                   <button
                     onClick={() => toggleSoldStatus(item.id)}
-                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${
-                      item.isSold
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-colors ${item.isSold
                         ? 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200'
                         : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
-                    }`}
+                      }`}
                   >
                     {item.isSold ? 'Mark Active' : 'Mark Sold'}
                   </button>

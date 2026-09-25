@@ -22,7 +22,7 @@ export const SavedItemsModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-slate-100 bg-slate-50/80">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
               <Bookmark className="w-4 h-4 fill-emerald-600" />
@@ -42,7 +42,7 @@ export const SavedItemsModal: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-5 space-y-3">
+        <div className="overflow-y-auto p-4 sm:p-5 space-y-3">
           {savedItems.length === 0 ? (
             <div className="text-center py-12 space-y-3">
               <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">

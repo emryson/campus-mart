@@ -16,6 +16,7 @@ import {
   Phone,
   User,
   CheckCircle2,
+  Lock,
   Image as ImageIcon
 } from 'lucide-react';
 import { useMarket } from '@/context/MarketContext';
@@ -36,7 +37,15 @@ const SAMPLE_PRESET_PHOTOS = [
 ];
 
 export const PostItemModal: React.FC = () => {
-  const { isPostModalOpen, closePostModal, addItem, setActiveItem, updateFilter } = useMarket();
+  const { 
+    isPostModalOpen, 
+    closePostModal, 
+    addItem, 
+    setActiveItem, 
+    updateFilter,
+    currentUser,
+    openAuthModal
+  } = useMarket();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form States
@@ -47,8 +56,8 @@ export const PostItemModal: React.FC = () => {
   const [condition, setCondition] = useState<ItemCondition>('like-new');
   
   // Location States
-  const [universityId, setUniversityId] = useState<UniversityId>('ug-legon');
-  const [location, setLocation] = useState('');
+  const [universityId, setUniversityId] = useState<UniversityId>(currentUser?.universityId || UNIVERSITIES[0].id);
+  const [location, setLocation] = useState(currentUser?.hostelOrHall || '');
   const [meetupSpot, setMeetupSpot] = useState('');
 
   // Description & Word Count
@@ -58,9 +67,19 @@ export const PostItemModal: React.FC = () => {
   const [photos, setPhotos] = useState<string[]>([]);
   const [photoError, setPhotoError] = useState<string | null>(null);
 
-  // Seller info
-  const [sellerName, setSellerName] = useState('');
-  const [sellerPhone, setSellerPhone] = useState('');
+  // Seller info prefilled from authenticated student
+  const [sellerName, setSellerName] = useState(currentUser?.name || '');
+  const [sellerPhone, setSellerPhone] = useState(currentUser?.phone || '');
+
+  // Pre-fill from currentUser when currentUser or modal changes
+  React.useEffect(() => {
+    if (currentUser) {
+      setSellerName(currentUser.name);
+      setSellerPhone(currentUser.phone);
+      setUniversityId(currentUser.universityId);
+      if (!location) setLocation(currentUser.hostelOrHall);
+    }
+  }, [currentUser, isPostModalOpen]);
 
   // Validation & UI states
   const [formError, setFormError] = useState<string | null>(null);
@@ -181,6 +200,12 @@ export const PostItemModal: React.FC = () => {
     e.preventDefault();
     setFormError(null);
 
+    if (!currentUser) {
+      setFormError('Please log in before posting an item.');
+      openAuthModal('post_item');
+      return;
+    }
+
     // Form Validations
     if (!title.trim()) {
       setFormError('Please enter an item title.');
@@ -189,7 +214,7 @@ export const PostItemModal: React.FC = () => {
 
     const parsedPrice = parseFloat(price);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      setFormError('Please enter a valid price in Ghanaian Cedis (GH₵).');
+      setFormError('Please enter a valid price.');
       return;
     }
 
@@ -258,6 +283,13 @@ export const PostItemModal: React.FC = () => {
       },
     });
 
+    if (!newItem) {
+      setIsSubmitting(false);
+      setFormError('Please log in before posting an item.');
+      openAuthModal('post_item');
+      return;
+    }
+
     setIsSubmitting(false);
     setShowSuccessToast(true);
 
@@ -277,14 +309,14 @@ export const PostItemModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/80">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-4 border-b border-slate-100 bg-slate-50/80">
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+            <h2 className="text-base sm:text-xl font-black text-slate-900 flex items-center gap-2 min-w-0">
               <Sparkles className="w-5 h-5 text-emerald-600" />
-              <span>Post an Item on Campus</span>
+              <span className="truncate">Post an Item on Campus</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Sell or trade with classmates • Up to 5 photos • Prices in GH₵ • Max 300 words
+              Sell or trade with classmates • Up to 5 photos • Max 300 words
             </p>
           </div>
 
@@ -311,7 +343,7 @@ export const PostItemModal: React.FC = () => {
         )}
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto p-5 sm:p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
           {formError && (
             <div className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 flex items-start gap-2.5 text-xs text-rose-800 animate-in fade-in">
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
@@ -338,7 +370,7 @@ export const PostItemModal: React.FC = () => {
             </div>
 
             {/* Photo preview cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
               {photos.map((photo, index) => (
                 <div 
                   key={index}
@@ -464,13 +496,12 @@ export const PostItemModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Section 3: Price in Ghanaian Cedis & Negotiability */}
+          {/* Section 3: Price & Negotiability */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200/80">
             {/* Price in GH₵ */}
             <div className="space-y-1.5">
               <label htmlFor={priceId} className="text-xs font-bold text-slate-800 flex items-center justify-between">
-                <span>Price in Ghanaian Cedis (GH₵) <span className="text-rose-500">*</span></span>
-                <span className="text-[10px] text-emerald-700 font-semibold">Ghanaian Cedis</span>
+                <span>Price <span className="text-rose-500">*</span></span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-extrabold text-emerald-700">

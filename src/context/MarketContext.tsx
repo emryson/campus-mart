@@ -1,18 +1,21 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { CampusItem, FilterState, UniversityId, ItemCategory, ItemCondition } from '@/types/market';
+import { CampusItem, FilterState, UniversityId, ItemCategory, ItemCondition, StudentUser } from '@/types/market';
 import { INITIAL_CAMPUS_ITEMS } from '@/data/mockItems';
+import { UNIVERSITIES } from '@/data/universities';
 
 interface MarketContextType {
   items: CampusItem[];
   savedItemIds: string[];
   filters: FilterState;
   activeItem: CampusItem | null;
+  currentUser: StudentUser | null;
   isPostModalOpen: boolean;
   isSavedModalOpen: boolean;
   isMyListingsModalOpen: boolean;
   isSafetyModalOpen: boolean;
+  isAuthModalOpen: boolean;
   filteredItems: CampusItem[];
   myListings: CampusItem[];
   savedItems: CampusItem[];
@@ -24,8 +27,14 @@ interface MarketContextType {
   closeMyListingsModal: () => void;
   openSafetyModal: () => void;
   closeSafetyModal: () => void;
+  openAuthModal: (actionAfterAuth?: 'post_item') => void;
+  closeAuthModal: () => void;
+  login: (schoolId: string, username: string, password: string) => Promise<AuthResult>;
+  loginAsAdmin: (username: string, password: string) => Promise<AuthResult>;
+  signup: (userData: Omit<StudentUser, 'id' | 'createdAt' | 'isVerified' | 'role'> & { password: string }) => Promise<AuthResult>;
+  logout: () => void;
   setActiveItem: (item: CampusItem | null) => void;
-  addItem: (newItem: Omit<CampusItem, 'id' | 'createdAt' | 'views'>) => CampusItem;
+  addItem: (newItem: Omit<CampusItem, 'id' | 'createdAt' | 'views'>) => CampusItem | null;
   deleteItem: (id: string) => void;
   toggleSoldStatus: (id: string) => void;
   toggleSaveItem: (id: string) => void;
@@ -53,19 +62,32 @@ const MarketContext = createContext<MarketContextType | undefined>(undefined);
 const STORAGE_KEY_ITEMS = 'campus_mart_items_v2';
 const STORAGE_KEY_SAVED = 'campus_mart_saved_v2';
 
+interface AuthResult {
+  success: boolean;
+  user?: StudentUser;
+  error?: string;
+}
+
 export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CampusItem[]>(INITIAL_CAMPUS_ITEMS);
   const [savedItemIds, setSavedItemIds] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<StudentUser | null>(null);
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [activeItem, setActiveItem] = useState<CampusItem | null>(null);
+  
+  // Modals
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
   const [isMyListingsModalOpen, setIsMyListingsModalOpen] = useState(false);
   const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<'post_item' | null>(null);
+
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from LocalStorage
+  // Load local marketplace preferences and the server-backed session.
   useEffect(() => {
+    const loadState = async () => {
     try {
       const storedItems = localStorage.getItem(STORAGE_KEY_ITEMS);
       if (storedItems) {
@@ -78,14 +100,22 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (storedSaved) {
         setSavedItemIds(JSON.parse(storedSaved));
       }
+      const sessionResponse = await fetch('/api/auth/me', { cache: 'no-store' });
+      if (sessionResponse.ok) {
+        const sessionData = await sessionResponse.json();
+        setCurrentUser(sessionData.user || null);
+      }
     } catch (err) {
       console.error('Failed to load CampusMart storage:', err);
     } finally {
       setIsLoaded(true);
     }
+    };
+
+    void loadState();
   }, []);
 
-  // Save to LocalStorage
+  // Save items to LocalStorage
   useEffect(() => {
     if (!isLoaded) return;
     try {
@@ -95,6 +125,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [items, isLoaded]);
 
+  // Save saved IDs
   useEffect(() => {
     if (!isLoaded) return;
     try {
@@ -104,7 +135,16 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [savedItemIds, isLoaded]);
 
-  const openPostModal = () => setIsPostModalOpen(true);
+  // Post modal guard: ONLY available for logged in users
+  const openPostModal = () => {
+    if (!currentUser) {
+      setPendingAction('post_item');
+      setIsAuthModalOpen(true);
+      return;
+    }
+    setIsPostModalOpen(true);
+  };
+
   const closePostModal = () => setIsPostModalOpen(false);
   const openSavedModal = () => setIsSavedModalOpen(true);
   const closeSavedModal = () => setIsSavedModalOpen(false);
@@ -113,23 +153,112 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const openSafetyModal = () => setIsSafetyModalOpen(true);
   const closeSafetyModal = () => setIsSafetyModalOpen(false);
 
-  const addItem = (itemData: Omit<CampusItem, 'id' | 'createdAt' | 'views'>): CampusItem => {
+  const openAuthModal = (actionAfterAuth?: 'post_item') => {
+    if (actionAfterAuth) setPendingAction(actionAfterAuth);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+    setPendingAction(null);
+  };
+
+  const login = async (schoolId: string, username: string, password: string): Promise<AuthResult> => {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schoolId, username, password }),
+    });
+    const result = await response.json();
+    if (!response.ok) return { success: false, error: result.error || 'Unable to sign in.' };
+
+    setCurrentUser(result.user);
+    setIsAuthModalOpen(false);
+    if (pendingAction === 'post_item') {
+      setPendingAction(null);
+      setTimeout(() => setIsPostModalOpen(true), 150);
+    }
+    return { success: true, user: result.user };
+  };
+
+  const loginAsAdmin = async (username: string, password: string): Promise<AuthResult> => {
+    const response = await fetch('/api/auth/admin-login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const result = await response.json();
+    if (!response.ok) return { success: false, error: result.error || 'Unable to sign in as admin.' };
+    setCurrentUser(result.user);
+    return { success: true, user: result.user };
+  };
+
+  const signup = async (userData: Omit<StudentUser, 'id' | 'createdAt' | 'isVerified' | 'role'> & { password: string }): Promise<AuthResult> => {
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    });
+    const result = await response.json();
+    if (!response.ok) return { success: false, error: result.error || 'Unable to create account.' };
+
+    setCurrentUser(result.user);
+    setIsAuthModalOpen(false);
+    if (pendingAction === 'post_item') {
+      setPendingAction(null);
+      setTimeout(() => setIsPostModalOpen(true), 150);
+    }
+    return { success: true, user: result.user };
+  };
+
+  const logout = () => {
+    void fetch('/api/auth/logout', { method: 'POST' });
+    setCurrentUser(null);
+    setIsPostModalOpen(false);
+  };
+
+  const recordActivity = (type: string, metadata: Record<string, unknown> = {}) => {
+    if (!currentUser) return;
+    void fetch('/api/activity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, metadata }),
+    });
+  };
+
+  const addItem = (itemData: Omit<CampusItem, 'id' | 'createdAt' | 'views'>): CampusItem | null => {
+    if (!currentUser) {
+      return null;
+    }
+
     const newItem: CampusItem = {
       ...itemData,
       id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       createdAt: new Date().toISOString(),
       views: 1,
       isCustomUserPost: true,
+      ownerId: currentUser.id,
       isSold: false,
     };
 
     setItems((prev) => [newItem, ...prev]);
+    recordActivity('listing_created', { itemId: newItem.id, category: newItem.category });
     return newItem;
   };
 
   const deleteItem = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-    if (activeItem?.id === id) setActiveItem(null);
+    if (!currentUser) return;
+    if (currentUser.role !== 'admin') {
+      const item = items.find((listing) => listing.id === id);
+      if (!item || item.ownerId !== currentUser.id) return;
+    }
+    void fetch(`/api/listings/${encodeURIComponent(id)}/delete`, { method: 'POST' }).then((response) => {
+      if (!response.ok) throw new Error('Listing deletion was not authorized');
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      if (activeItem?.id === id) setActiveItem(null);
+    }).catch((error) => {
+      console.error('Failed to delete listing:', error);
+    });
   };
 
   const toggleSoldStatus = (id: string) => {
@@ -145,6 +274,7 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setSavedItemIds((prev) =>
       prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
+    recordActivity('saved_item_toggled', { itemId: id });
   };
 
   const isItemSaved = (id: string) => savedItemIds.includes(id);
@@ -222,14 +352,16 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (filters.sortBy === 'price-asc') return a.price - b.price;
         if (filters.sortBy === 'price-desc') return b.price - a.price;
         if (filters.sortBy === 'popular') return (b.views || 0) - (a.views || 0);
-        // Default newest
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
   }, [items, filters]);
 
   const myListings = useMemo(() => {
-    return items.filter((item) => item.isCustomUserPost);
-  }, [items]);
+    if (!currentUser) return [];
+    return items.filter((item) =>
+      item.isCustomUserPost && (currentUser.role === 'admin' || item.ownerId === currentUser.id)
+    );
+  }, [items, currentUser]);
 
   const savedItems = useMemo(() => {
     return items.filter((item) => savedItemIds.includes(item.id));
@@ -240,12 +372,14 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       value={{
         items,
         savedItemIds,
+        currentUser,
         filters,
         activeItem,
         isPostModalOpen,
         isSavedModalOpen,
         isMyListingsModalOpen,
         isSafetyModalOpen,
+        isAuthModalOpen,
         filteredItems,
         myListings,
         savedItems,
@@ -257,6 +391,12 @@ export const MarketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         closeMyListingsModal,
         openSafetyModal,
         closeSafetyModal,
+        openAuthModal,
+        closeAuthModal,
+        login,
+        loginAsAdmin,
+        signup,
+        logout,
         setActiveItem,
         addItem,
         deleteItem,

@@ -1,5 +1,22 @@
 export type UniversityId = string;
 
+export interface StudentUser {
+  id: string;
+  role: 'student' | 'admin';
+  schoolId: string;
+  username: string;
+  name: string;
+  email: string;
+  phone: string;
+  universityId: UniversityId;
+  universityName: string;
+  hostelOrHall: string;
+  studentId?: string;
+  avatarUrl?: string;
+  isVerified: boolean;
+  createdAt: string;
+}
+
 export interface University {
   id: UniversityId;
   name: string;
@@ -54,6 +71,7 @@ export interface CampusItem {
   views?: number;
   featured?: boolean;
   isCustomUserPost?: boolean;
+  ownerId?: string;
 }
 
 export interface FilterState {

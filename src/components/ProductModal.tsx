@@ -31,7 +31,8 @@ export const ProductModal: React.FC = () => {
     toggleSaveItem, 
     deleteItem, 
     toggleSoldStatus,
-    openSafetyModal
+    openSafetyModal,
+    currentUser
   } = useMarket();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -72,7 +73,7 @@ export const ProductModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header bar */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-slate-50/70">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-slate-100 bg-slate-50/70">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">
               {activeItem.universityName}
@@ -121,13 +122,13 @@ export const ProductModal: React.FC = () => {
         </div>
 
         {/* Modal Body */}
-        <div className="overflow-y-auto p-5 sm:p-6 space-y-6">
+        <div className="overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             {/* Left Column: Image Gallery (Up to 5 photos) */}
             <div className="lg:col-span-7 space-y-3">
               {/* Main Photo Viewer */}
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-inner group">
+              <div className="relative aspect-[4/3] sm:aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-inner group">
                 <img
                   src={images[activeImageIndex]}
                   alt={`${activeItem.title} - photo ${activeImageIndex + 1}`}
@@ -211,7 +212,7 @@ export const ProductModal: React.FC = () => {
               <div className="space-y-4">
                 {/* Title */}
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                  <h2 className="text-lg sm:text-2xl font-black text-slate-900 leading-snug">
                     {activeItem.title}
                   </h2>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-2">
@@ -363,7 +364,7 @@ export const ProductModal: React.FC = () => {
                 </div>
 
                 {/* Manage if user is creator */}
-                {activeItem.isCustomUserPost && (
+                {currentUser && (currentUser.role === 'admin' || (activeItem.isCustomUserPost && activeItem.ownerId === currentUser.id)) && (
                   <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
                     <button
                       onClick={() => toggleSoldStatus(activeItem.id)}

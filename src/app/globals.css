@@ -1,16 +1,79 @@
 @import "tailwindcss";
 
+@theme {
+  --color-emerald-50: #fff7ed;
+  --color-emerald-100: #ffedd5;
+  --color-emerald-200: #fed7aa;
+  --color-emerald-300: #fdba74;
+  --color-emerald-400: #fb923c;
+  --color-emerald-500: #f15a0a;
+  --color-emerald-600: #f15a0a;
+  --color-emerald-700: #c2410c;
+  --color-emerald-800: #9a3412;
+  --color-emerald-900: #7c2d12;
+  --color-emerald-950: #431407;
+
+  --color-teal-50: #fafaf9;
+  --color-teal-100: #f5f5f4;
+  --color-teal-200: #e7e5e4;
+  --color-teal-300: #d6d3d1;
+  --color-teal-400: #a8a29e;
+  --color-teal-500: #57534e;
+  --color-teal-600: #44403c;
+  --color-teal-700: #292524;
+  --color-teal-800: #1c1917;
+  --color-teal-900: #0c0a09;
+  --color-teal-950: #0c0a09;
+
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fb923c;
+  --color-amber-500: #f15a0a;
+  --color-amber-600: #c2410c;
+  --color-amber-700: #9a3412;
+  --color-amber-800: #7c2d12;
+  --color-amber-900: #431407;
+
+  --color-rose-50: #fef2f2;
+  --color-rose-100: #fee2e2;
+  --color-rose-200: #fecaca;
+  --color-rose-300: #fca5a5;
+  --color-rose-400: #f87171;
+  --color-rose-500: #991b1b;
+  --color-rose-600: #991b1b;
+  --color-rose-700: #7f1d1d;
+
+  --color-indigo-400: #60a5fa;
+  --color-indigo-500: #1e40af;
+  --color-indigo-600: #1e40af;
+  --color-indigo-700: #1e3a8a;
+
+  --color-slate-50: #fffbeb;
+  --color-slate-100: #fafaf9;
+  --color-slate-200: #f5f5f4;
+  --color-slate-300: #e7e5e4;
+  --color-slate-400: #a8a29e;
+  --color-slate-500: #78716c;
+  --color-slate-600: #57534e;
+  --color-slate-700: #44403c;
+  --color-slate-800: #292524;
+  --color-slate-900: #1c1917;
+  --color-slate-950: #1c1917;
+}
+
 :root {
-  --primary-green: #059669;
-  --primary-green-hover: #047857;
-  --primary-green-light: #ecfdf5;
-  --accent-gold: #d97706;
+  --primary-green: #f15a0a;
+  --primary-green-hover: #c2410c;
+  --primary-green-light: #fff7ed;
+  --accent-gold: #f15a0a;
   --accent-gold-light: #fffbeb;
-  --campus-navy: #0f172a;
-  --campus-slate: #1e293b;
-  --campus-muted: #64748b;
-  --campus-border: #e2e8f0;
-  --campus-bg: #f8fafc;
+  --campus-navy: #1c1917;
+  --campus-slate: #57534e;
+  --campus-muted: #78716c;
+  --campus-border: #d6d3d1;
+  --campus-bg: #fffbeb;
   --campus-card: #ffffff;
 }
 
@@ -20,10 +83,27 @@
   }
   body {
     background-color: var(--campus-bg);
-    color: #1e293b;
-    font-family: var(--font-sans, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+    color: #1c1917;
+    letter-spacing: 0.02em;
+    font-family: var(--font-body, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display, var(--font-body, sans-serif));
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono, monospace);
   }
 }
 
@@ -33,14 +113,14 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #f5f5f4;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d4d4d8;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #a8a29e;
 }
 
 /* Glassmorphism Classes */
@@ -48,18 +128,18 @@
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(214, 211, 209, 0.8);
 }
 
 .glass-nav {
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+  border-bottom: 1px solid rgba(214, 211, 209, 0.85);
 }
 
 .glass-dark {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(28, 25, 23, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -76,37 +156,37 @@
 }
 
 .shimmer-bg {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, #fafaf9 25%, #f5f5f4 50%, #fafaf9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
 /* Custom Badges */
 .badge-cedi {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: white;
+  background: #f15a0a;
+  color: #fffbeb;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .badge-negotiable {
-  background-color: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
 }
 
 .badge-fixed {
-  background-color: #f1f5f9;
-  color: #475569;
-  border: 1px solid #cbd5e1;
+  background-color: transparent;
+  color: #57534e;
+  border: 1px solid #d4d4d8;
 }
 
 /* Card Hover Elevation */
 .card-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s ease;
 }
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.06);
 }
 
 /* Hide scrollbar for category list */
@@ -116,4 +196,65 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Dark mode keeps the same restrained brand accents while shifting surfaces and text. */
+.dark body {
+  background: #1c1917;
+  color: #fafaf9;
+}
+
+.dark .bg-white,
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
+  background-color: #292524;
+}
+
+.dark .bg-slate-200 {
+  background-color: #44403c;
+}
+
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700 {
+  color: #fafaf9;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #d6d3d1;
+}
+
+.dark .text-slate-400 {
+  color: #a8a29e;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300 {
+  border-color: #44403c;
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #292524;
+  color: #fafaf9;
+  border-color: #57534e;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #a8a29e;
+}
+
+.dark .glass-nav,
+.dark .glass-panel {
+  background: rgba(28, 25, 23, 0.94);
+  border-color: rgba(87, 83, 78, 0.8);
+}
+
+.dark .card-hover,
+.dark .bg-white {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
 }

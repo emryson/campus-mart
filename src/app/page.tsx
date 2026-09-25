@@ -51,7 +51,7 @@ export default function Home() {
       <FilterToolbar />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 pt-6 sm:py-8 pb-28 lg:pb-8 space-y-8">
         
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
