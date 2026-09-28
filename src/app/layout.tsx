@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   description: 'Buy, sell, and trade textbooks, laptops, mini-fridges, dorm essentials, and gadgets safely with students on your university campus in Ghana (UG Legon, KNUST, UCC, UPSA, Ashesi).',
   keywords: 'campus marketplace, Ghana student e-commerce, Legon student market, KNUST buy and sell, dorm essentials, Ghanaian cedis',
   authors: [{ name: 'CampusMart Team' }],
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export const viewport: Viewport = {
