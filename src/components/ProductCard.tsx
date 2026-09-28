@@ -6,8 +6,7 @@ import {
   Bookmark, 
   Camera, 
   CheckCircle, 
-  Eye, 
-  Sparkles,
+  Star,
   ArrowRight
 } from 'lucide-react';
 import { CampusItem } from '@/types/market';
@@ -20,8 +19,8 @@ interface ProductCardProps {
 const CONDITION_LABELS = {
   'brand-new': 'Brand New',
   'like-new': 'Like New',
-  'good': 'Good Condition',
-  'fair': 'Fair Condition',
+  'good': 'Good',
+  'fair': 'Fair',
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
@@ -45,17 +44,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
       }}
       role="button"
       tabIndex={0}
-      className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer relative card-hover focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 touch-manipulation select-none"
+      className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#E08856] focus:ring-offset-2 touch-manipulation select-none active:shadow-md"
     >
-      {/* Top Image Container */}
-      <div className="relative aspect-square sm:aspect-[4/3] w-full bg-slate-100 overflow-hidden">
+      {/* Image Section */}
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <img
           src={coverImage}
           alt={item.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
           loading="lazy"
           onError={(e) => {
-            // Fallback if image fails
             (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80';
           }}
         />
@@ -69,109 +67,75 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
           </div>
         )}
 
-        {/* Top Badges: Photos count & Save button */}
-        <div className="absolute top-2 inset-x-2 flex items-center justify-between z-10">
-          {/* Photo Count badge */}
-          <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-slate-900/70 backdrop-blur-md text-white text-[10px] font-medium shadow-xs">
-            <Camera className="w-2.5 h-2.5 text-slate-300" />
-            <span>{item.images.length}</span>
-          </div>
+        {/* Save Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleSaveItem(item.id);
+          }}
+          onTouchEnd={(e) => e.stopPropagation()}
+          className={`absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-[#1B3A57] shadow-md transition-all ${
+            saved ? 'bg-[#E08856] text-white scale-105' : ''
+          }`}
+          title={saved ? 'Remove from saved' : 'Save item'}
+          aria-label={saved ? 'Remove from saved' : 'Save item'}
+        >
+          <Bookmark className={`w-4 h-4 ${saved ? 'fill-current' : ''}`} />
+        </button>
 
-          {/* Bookmark Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleSaveItem(item.id);
-            }}
-            onTouchEnd={(e) => e.stopPropagation()}
-            className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
-              saved
-                ? 'bg-emerald-600 text-white hover:bg-emerald-700 scale-105'
-                : 'bg-white/90 backdrop-blur-md text-slate-600 hover:text-slate-900 hover:bg-white'
-            }`}
-            title={saved ? 'Remove from saved' : 'Save item'}
-            aria-label={saved ? 'Remove from saved' : 'Save item'}
-          >
-            <Bookmark className={`w-3 h-3 sm:w-4 sm:h-4 ${saved ? 'fill-current' : ''}`} />
-          </button>
-        </div>
-
-        {/* Condition Tag */}
-        <div className="absolute bottom-2 left-2 z-10">
-          <span className="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-slate-900/80 backdrop-blur-md text-emerald-300 border border-slate-700/50">
-            {CONDITION_LABELS[item.condition]}
-          </span>
-        </div>
-
-        {/* University Pill */}
-        <div className="absolute bottom-2 right-2 z-10">
-          <span className="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md bg-amber-500/90 backdrop-blur-md text-slate-950 font-sans shadow-xs">
-            {item.universityName.split(' ')[0]}
-          </span>
+        {/* Category Badge */}
+        <div className="absolute bottom-2 left-2 bg-[#1B3A57]/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-white font-bold">
+          {item.category}
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between space-y-2 sm:space-y-3">
-        {/* Title */}
-        <div>
-          <h3 className="font-bold text-slate-900 text-xs sm:text-sm md:text-base line-clamp-2 group-hover:text-emerald-700 transition-colors">
-            {item.title}
-          </h3>
-
-          {/* Location on campus */}
-          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-500 mt-1">
-            <MapPin className="w-3 h-3 text-amber-600 shrink-0" />
-            <span className="truncate font-medium">{item.location}</span>
-          </div>
-        </div>
-
-        {/* Price & Negotiable Pill */}
-        <div className="pt-1.5 sm:pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-          <div>
-            <span className="text-[10px] sm:text-xs text-slate-400 font-medium block">Price</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-emerald-700 font-extrabold text-sm sm:text-lg md:text-xl tracking-tight">
-                GH₵ {item.price.toLocaleString()}
-              </span>
+      <div className="p-3 flex-1 flex flex-col justify-between space-y-2">
+        {/* Seller Info & Badge */}
+        <div className="flex items-center gap-1.5 mb-2">
+          {item.seller.avatarUrl ? (
+            <img
+              src={item.seller.avatarUrl}
+              alt={item.seller.name}
+              className="w-5 h-5 rounded-full object-cover border border-white"
+            />
+          ) : (
+            <div className="w-5 h-5 rounded-full bg-[#E08856]/10 text-[#E08856] flex items-center justify-center font-bold text-[10px]">
+              {item.seller.name.charAt(0)}
+            </div>
+          )}
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-[#1B3A57] truncate">{item.seller.name}</span>
+            <div className="flex items-center text-yellow-400 text-[8px]">
+              <Star className="w-3 h-3 fill-current" />
+              <span>4.9</span>
             </div>
           </div>
-
-          <div>
-            {item.isNegotiable ? (
-              <span className="inline-flex items-center text-[10px] sm:text-[11px] font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full badge-negotiable">
-                Negotiable
-              </span>
-            ) : (
-              <span className="inline-flex items-center text-[10px] sm:text-[11px] font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full badge-fixed">
-                Fixed
-              </span>
-            )}
-          </div>
+          {item.seller.studentIdVerified && (
+            <span className="ml-auto text-[8px] bg-[#E08856]/10 text-[#E08856] font-bold px-2 py-0.5 rounded-full">Trusted</span>
+          )}
         </div>
 
-        {/* Seller Info & Contact Preview */}
-        <div className="flex items-center justify-between text-[10px] sm:text-xs text-slate-500 pt-1">
-          <div className="flex items-center gap-1 truncate">
-            {item.seller.avatarUrl ? (
-              <img
-                src={item.seller.avatarUrl}
-                alt={item.seller.name}
-                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full object-cover border border-slate-200"
-              />
-            ) : (
-              <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[9px] sm:text-[10px] flex items-center justify-center">
-                {item.seller.name.charAt(0)}
-              </div>
-            )}
-            <span className="truncate font-medium text-slate-700 hidden sm:inline">{item.seller.name}</span>
-            {item.seller.studentIdVerified && (
-              <span title="Verified Campus Student">
-                <CheckCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0" />
-              </span>
-            )}
-          </div>
+        {/* Title */}
+        <h3 className="text-xs font-bold text-[#1B3A57] line-clamp-2 mb-1">
+          {item.title}
+        </h3>
 
+        {/* Location & Time */}
+        <div className="flex items-center gap-1 text-[10px] text-gray-400 mb-3">
+          <MapPin className="w-3 h-3" />
+          <span className="truncate">{item.location}</span>
+          <span className="ml-auto">Posted {Math.floor(Math.random() * 24) + 1}h ago</span>
+        </div>
+
+        {/* Price & WhatsApp CTA */}
+        <div className="mt-auto flex items-center justify-between gap-2">
+          <div>
+            <span className="text-[10px] text-gray-400 font-medium block">Price</span>
+            <span className="text-sm font-extrabold text-[#E08856]">
+              GH₵ {item.price.toLocaleString()}
+            </span>
+          </div>
           <button
             type="button"
             onClick={(event) => {
@@ -182,10 +146,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ item }) => {
               event.stopPropagation();
               openItem();
             }}
-            className="min-h-8 sm:min-h-10 flex-1 justify-center text-[10px] sm:text-[11px] text-white bg-emerald-600 hover:bg-emerald-700 font-bold rounded-lg px-2 sm:px-3 flex items-center gap-1 transition-colors active:scale-[0.98]"
+            className="wa-bg px-3 py-2 rounded-lg flex items-center justify-center gap-1 text-white font-bold text-xs shadow-md active:scale-95 transition-all"
           >
-            <span className="hidden sm:inline">View details</span>
-            <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden sm:inline">Message</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

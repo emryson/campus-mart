@@ -120,8 +120,8 @@ export const Navbar: React.FC = () => {
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight text-slate-900">
-                Campus<span className="text-emerald-600">Mart</span>
+              <span className="headline font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight text-[#1B3A57]">
+                Campus<span className="text-[#D4A574]">Mart</span>
               </span>
               <span className="hidden sm:inline bg-amber-100 text-amber-800 font-bold text-[10px] px-1.5 py-0.5 rounded tracking-wide uppercase border border-amber-200">
                 Ghana

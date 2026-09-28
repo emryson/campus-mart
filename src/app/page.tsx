@@ -23,6 +23,8 @@ import { MyListingsModal } from '@/components/MyListingsModal';
 import { SafetyModal } from '@/components/SafetyModal';
 import { SafetyBanner } from '@/components/SafetyBanner';
 import { Footer } from '@/components/Footer';
+import { CampusStats } from '@/components/CampusStats';
+import { TrustSection } from '@/components/TrustSection';
 import { UNIVERSITIES } from '@/data/universities';
 
 export default function Home() {
@@ -123,6 +125,12 @@ export default function Home() {
 
         {/* Safety Callout Banner */}
         <SafetyBanner />
+
+        {/* Campus Stats Section */}
+        <CampusStats />
+
+        {/* Trust Section */}
+        <TrustSection />
       </main>
 
       {/* Floating Action Button for Mobile */}

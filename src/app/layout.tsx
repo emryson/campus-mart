@@ -1,18 +1,11 @@
 import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from 'next/font/google';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { MarketProvider } from '@/context/MarketContext';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-heading',
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 });
@@ -43,8 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable} ${jetBrainsMono.variable}`}>
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
+    <html lang="en" className={`${plusJakartaSans.variable} ${jetBrainsMono.variable}`}>
+      <body className="min-h-screen bg-[#FDFCFB] text-[#1B3A57] antialiased selection:bg-[#E08856] selection:text-white">
         <MarketProvider>
           {children}
         </MarketProvider>

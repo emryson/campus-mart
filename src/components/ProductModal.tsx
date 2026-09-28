@@ -247,6 +247,28 @@ export const ProductModal: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Negotiate Offer Input (if negotiable) */}
+                {activeItem.isNegotiable && (
+                  <div className="p-3 bg-amber-50/60 border border-amber-200/70 rounded-xl space-y-1.5">
+                    <label className="text-xs font-bold text-amber-900 block">
+                      Propose a Counter-Offer in GH₵:
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">GH₵</span>
+                        <input
+                          type="number"
+                          placeholder={`e.g. ${Math.round(activeItem.price * 0.85)}`}
+                          value={offerPrice}
+                          onChange={(e) => setOfferPrice(e.target.value)}
+                          className="w-full text-xs pl-11 pr-3 py-1.5 bg-white border border-amber-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        />
+                      </div>
+                      <span className="text-[11px] text-amber-800">Applies to WhatsApp message</span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Primary Contact Buttons */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {/* WhatsApp */}
@@ -306,7 +328,7 @@ export const ProductModal: React.FC = () => {
                 <div className="space-y-0.5">
                   <p className="font-bold">Ghana Campus Safety Protocol</p>
                   <p className="text-amber-800/90 leading-relaxed">
-                    Always meet in a public campus location (e.g. Porters Lodge, Balme Library, Dining Hall). 
+                    Always meet in a public campus location (e.g. Porters Lodge, Balme Library, Dining Hall).
                     <strong> Never send MoMo advance deposits</strong> before testing the item.
                   </p>
                 </div>
@@ -388,28 +410,6 @@ export const ProductModal: React.FC = () => {
                     {activeItem.description}
                   </p>
                 </div>
-
-                {/* Negotiate Offer Input (if negotiable) */}
-                {activeItem.isNegotiable && (
-                  <div className="p-3 bg-amber-50/60 border border-amber-200/70 rounded-xl space-y-1.5">
-                    <label className="text-xs font-bold text-amber-900 block">
-                      Propose a Counter-Offer in GH₵:
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <div className="relative flex-1">
-                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">GH₵</span>
-                        <input
-                          type="number"
-                          placeholder={`e.g. ${Math.round(activeItem.price * 0.85)}`}
-                          value={offerPrice}
-                          onChange={(e) => setOfferPrice(e.target.value)}
-                          className="w-full text-xs pl-11 pr-3 py-1.5 bg-white border border-amber-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500"
-                        />
-                      </div>
-                      <span className="text-[11px] text-amber-800">Applies to WhatsApp message</span>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 

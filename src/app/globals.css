@@ -1,14 +1,28 @@
 @import "tailwindcss";
 
 @theme {
+  /* Campus Mart Design System Colors */
+  --color-deep-navy: #1B3A57;
+  --color-earth-orange: #E08856;
+  --color-ghanaian-gold: #D4A574;
+  --color-whatsapp-green: #25D366;
+  --color-warm-bg: #FDFCFB;
+  --color-surface: #FFFFFF;
+  --color-success: #22C55E;
+  --color-error: #EF4444;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-border: #E5E7EB;
+
+  /* Legacy color mapping for compatibility */
   --color-emerald-50: #fff7ed;
   --color-emerald-100: #ffedd5;
   --color-emerald-200: #fed7aa;
   --color-emerald-300: #fdba74;
   --color-emerald-400: #fb923c;
-  --color-emerald-500: #f15a0a;
-  --color-emerald-600: #f15a0a;
-  --color-emerald-700: #c2410c;
+  --color-emerald-500: #E08856;
+  --color-emerald-600: #E08856;
+  --color-emerald-700: #c97445;
   --color-emerald-800: #9a3412;
   --color-emerald-900: #7c2d12;
   --color-emerald-950: #431407;
@@ -30,8 +44,8 @@
   --color-amber-200: #fde68a;
   --color-amber-300: #fcd34d;
   --color-amber-400: #fb923c;
-  --color-amber-500: #f15a0a;
-  --color-amber-600: #c2410c;
+  --color-amber-500: #E08856;
+  --color-amber-600: #c97445;
   --color-amber-700: #9a3412;
   --color-amber-800: #7c2d12;
   --color-amber-900: #431407;
@@ -50,33 +64,48 @@
   --color-indigo-600: #1e40af;
   --color-indigo-700: #1e3a8a;
 
-  --color-slate-50: #fffbeb;
-  --color-slate-100: #fafaf9;
+  --color-slate-50: #FDFCFB;
+  --color-slate-100: #FFFFFF;
   --color-slate-200: #f5f5f4;
   --color-slate-300: #e7e5e4;
-  --color-slate-400: #a8a29e;
-  --color-slate-500: #78716c;
+  --color-slate-400: #6B7280;
+  --color-slate-500: #6B7280;
   --color-slate-600: #57534e;
   --color-slate-700: #44403c;
   --color-slate-800: #292524;
-  --color-slate-900: #1c1917;
+  --color-slate-900: #1B3A57;
   --color-slate-950: #1c1917;
 }
 
 :root {
-  --primary-green: #f15a0a;
-  --primary-green-hover: #c2410c;
+  /* Campus Mart Design System Variables */
+  --deep-navy: #1B3A57;
+  --earth-orange: #E08856;
+  --earth-orange-hover: #c97445;
+  --ghanaian-gold: #D4A574;
+  --whatsapp-green: #25D366;
+  --warm-bg: #FDFCFB;
+  --surface: #FFFFFF;
+  --success: #22C55E;
+  --error: #EF4444;
+  --text-secondary: #6B7280;
+  --text-tertiary: #9CA3AF;
+  --border: #E5E7EB;
+
+  /* Legacy variables for compatibility */
+  --primary-green: #E08856;
+  --primary-green-hover: #c97445;
   --primary-green-light: #fff7ed;
-  --accent-gold: #f15a0a;
+  --accent-gold: #D4A574;
   --accent-gold-light: #fffbeb;
-  --campus-navy: #1c1917;
+  --campus-navy: #1B3A57;
   --campus-slate: #57534e;
   --campus-muted: #78716c;
-  --campus-border: #d6d3d1;
-  --campus-bg: #fffbeb;
-  --campus-card: #ffffff;
-  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --campus-border: #E5E7EB;
+  --campus-bg: #FDFCFB;
+  --campus-card: #FFFFFF;
+  --font-heading: 'Epilogue', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @layer base {
@@ -84,10 +113,10 @@
     box-sizing: border-box;
   }
   body {
-    background-color: var(--campus-bg);
-    color: #1c1917;
+    background-color: var(--warm-bg, #FDFCFB);
+    color: var(--deep-navy, #1B3A57);
     letter-spacing: 0.02em;
-    font-family: var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-family: var(--font-body, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -99,7 +128,7 @@
   h6 {
     font-family: var(--font-heading, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
     letter-spacing: -0.02em;
-    font-weight: 500;
+    font-weight: 700;
   }
   code,
   pre,
@@ -165,7 +194,7 @@
 
 /* Custom Badges */
 .badge-cedi {
-  background: #f15a0a;
+  background: #E08856;
   color: #fffbeb;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
@@ -181,6 +210,64 @@
   color: #57534e;
   border: 1px solid #d4d4d8;
 }
+
+/* Campus Mart Design System Utilities */
+.gh-gradient {
+  background: linear-gradient(135deg, #1B3A57 0%, #2c4c6e 100%);
+}
+
+.accent-gold {
+  color: #D4A574;
+}
+
+.wa-bg {
+  background-color: #25D366;
+}
+
+.wa-bg:hover {
+  background-color: #20ba59;
+}
+
+.earth {
+  color: #E08856;
+}
+
+.gold {
+  color: #D4A574;
+}
+
+.headline {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-weight: 800;
+}
+
+/* 4px Base Unit Spacing Scale */
+.spacing-xs { margin: 4px; }
+.spacing-sm { margin: 8px; }
+.spacing-md { margin: 12px; }
+.spacing-lg { margin: 16px; }
+.spacing-xl { margin: 24px; }
+.spacing-2xl { margin: 32px; }
+.spacing-3xl { margin: 48px; }
+.spacing-4xl { margin: 64px; }
+
+.padding-xs { padding: 4px; }
+.padding-sm { padding: 8px; }
+.padding-md { padding: 12px; }
+.padding-lg { padding: 16px; }
+.padding-xl { padding: 24px; }
+.padding-2xl { padding: 32px; }
+.padding-3xl { padding: 48px; }
+.padding-4xl { padding: 64px; }
+
+.gap-xs { gap: 4px; }
+.gap-sm { gap: 8px; }
+.gap-md { gap: 12px; }
+.gap-lg { gap: 16px; }
+.gap-xl { gap: 24px; }
+.gap-2xl { gap: 32px; }
+.gap-3xl { gap: 48px; }
+.gap-4xl { gap: 64px; }
 
 /* Card Hover Elevation */
 .card-hover {
