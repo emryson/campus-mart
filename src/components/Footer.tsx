@@ -11,23 +11,23 @@ export const Footer: React.FC = () => {
   const { setSelectedUniversityId, openSafetyModal, openPostModal } = useMarket();
 
   return (
-    <footer className="bg-slate-950 text-slate-400 text-xs border-t border-slate-800 mt-16">
+    <footer className="bg-white text-slate-600 text-xs border-t border-hairline mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="space-y-3 md:col-span-1">
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-2 text-ink">
               <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0">
                 <Image src="/images/logo.png" alt="CampusMart logo" fill sizes="32px" className="object-contain" />
               </div>
-              <span className="font-extrabold text-base tracking-tight">
-                Campus<span className="text-emerald-400">Mart</span> Ghana
+              <span className="font-semibold text-base">
+                Campus<span className="text-brand-dark">Mart</span> Ghana
               </span>
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px]">
               Empowering Ghanaian university students to safely buy, sell, and trade electronics, dorm items, and textbooks peer-to-peer.
             </p>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-[11px] text-slate-300">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-white border border-hairline text-[11px] text-slate-600">
               <span>🇬🇭 Built for Ghana Campus Life</span>
             </div>
           </div>
@@ -35,10 +35,10 @@ export const Footer: React.FC = () => {
           {/* Supported Universities */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h4 className="font-bold text-white text-xs uppercase tracking-wider">
+              <h4 className="font-semibold text-ink text-xs">
                 Campuses
               </h4>
-              <span className="text-[10px] bg-slate-900 text-emerald-400 font-bold px-1.5 py-0.5 rounded border border-slate-800">
+              <span className="text-[10px] bg-brand-soft text-brand-dark font-semibold px-1.5 py-0.5 rounded-sm border border-success-border">
                 {UNIVERSITIES.length} Campuses
               </span>
             </div>
@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
                       setSelectedUniversityId(u.id);
                       window.scrollTo({ top: 350, behavior: 'smooth' });
                     }}
-                    className="hover:text-emerald-400 transition-colors text-left text-[11px] block truncate w-full"
+                    className="hover:text-primary transition-colors text-left text-[11px] block truncate w-full"
                     title={u.name}
                   >
                     {u.shortName} - {u.name}
@@ -62,17 +62,17 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="space-y-2">
-            <h4 className="font-bold text-white text-xs uppercase tracking-wider">
+            <h4 className="font-semibold text-ink text-xs">
               Student Features
             </h4>
             <ul className="space-y-1.5">
               <li>
-                <button onClick={openPostModal} className="hover:text-emerald-400 transition-colors">
+                <button onClick={openPostModal} className="hover:text-primary transition-colors">
                   Sell an Item (Post for Free)
                 </button>
               </li>
               <li>
-                <button onClick={openSafetyModal} className="hover:text-emerald-400 transition-colors">
+                <button onClick={openSafetyModal} className="hover:text-primary transition-colors">
                   Campus Meetup Safety Guide
                 </button>
               </li>
@@ -89,8 +89,8 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Safety & Trust */}
-          <div className="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold">
+          <div className="space-y-3 bg-white p-4 rounded-md border border-hairline">
+            <div className="flex items-center gap-2 text-brand-dark font-semibold">
               <ShieldCheck className="w-4 h-4" />
               <span>Campus Safety Notice</span>
             </div>
@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom copyright */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+        <div className="pt-8 border-t border-hairline flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-600">
           <p>© {new Date().getFullYear()} CampusMart Ghana. Peer-to-peer student marketplace.</p>
           <p className="flex items-center gap-1">
             Made for university students with <Heart className="w-3 h-3 text-rose-500 fill-rose-500" /> in Ghana

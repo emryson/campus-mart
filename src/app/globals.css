@@ -1,111 +1,172 @@
 @import "tailwindcss";
 
 @theme {
-  /* Campus Mart Design System Colors */
-  --color-deep-navy: #1B3A57;
-  --color-earth-orange: #E08856;
-  --color-ghanaian-gold: #D4A574;
-  --color-whatsapp-green: #25D366;
-  --color-warm-bg: #FDFCFB;
+  --color-primary: #2C5A8C;
+  --color-primary-hover: #1F3F66;
+  --color-primary-pressed: #163059;
+  --color-primary-soft: #EEF3F9;
+  --color-on-primary-soft: #1F3F66;
+  --color-brand: #2F5D4F;
+  --color-brand-dark: #21443A;
+  --color-brand-soft: #DBE7E2;
+  --color-ink: #0E1A2B;
+  --color-ink-700: #25334A;
+  --color-ink-600: #3D485C;
+  --color-ink-400: #8C94A3;
+  --color-ink-300: #BDC2CC;
+  --color-ink-200: #DCDFE5;
+  --color-ink-100: #EBEDF1;
+  --color-slate: #5C6678;
+  --color-subtle: #616B80;
+  --color-well: #F4F5F8;
   --color-surface: #FFFFFF;
-  --color-success: #22C55E;
-  --color-error: #EF4444;
-  --color-text-secondary: #6B7280;
-  --color-text-tertiary: #9CA3AF;
-  --color-border: #E5E7EB;
-
-  /* Legacy color mapping for compatibility */
-  --color-emerald-50: #fff7ed;
-  --color-emerald-100: #ffedd5;
-  --color-emerald-200: #fed7aa;
-  --color-emerald-300: #fdba74;
-  --color-emerald-400: #fb923c;
-  --color-emerald-500: #E08856;
-  --color-emerald-600: #E08856;
-  --color-emerald-700: #c97445;
-  --color-emerald-800: #9a3412;
-  --color-emerald-900: #7c2d12;
-  --color-emerald-950: #431407;
-
-  --color-teal-50: #fafaf9;
-  --color-teal-100: #f5f5f4;
-  --color-teal-200: #e7e5e4;
-  --color-teal-300: #d6d3d1;
-  --color-teal-400: #a8a29e;
-  --color-teal-500: #57534e;
-  --color-teal-600: #44403c;
-  --color-teal-700: #292524;
-  --color-teal-800: #1c1917;
-  --color-teal-900: #0c0a09;
-  --color-teal-950: #0c0a09;
-
-  --color-amber-50: #fffbeb;
-  --color-amber-100: #fef3c7;
-  --color-amber-200: #fde68a;
-  --color-amber-300: #fcd34d;
-  --color-amber-400: #fb923c;
-  --color-amber-500: #E08856;
-  --color-amber-600: #c97445;
-  --color-amber-700: #9a3412;
-  --color-amber-800: #7c2d12;
-  --color-amber-900: #431407;
-
-  --color-rose-50: #fef2f2;
-  --color-rose-100: #fee2e2;
-  --color-rose-200: #fecaca;
-  --color-rose-300: #fca5a5;
-  --color-rose-400: #f87171;
-  --color-rose-500: #991b1b;
-  --color-rose-600: #991b1b;
-  --color-rose-700: #7f1d1d;
-
-  --color-indigo-400: #60a5fa;
-  --color-indigo-500: #1e40af;
-  --color-indigo-600: #1e40af;
-  --color-indigo-700: #1e3a8a;
-
-  --color-slate-50: #FDFCFB;
-  --color-slate-100: #FFFFFF;
-  --color-slate-200: #f5f5f4;
-  --color-slate-300: #e7e5e4;
-  --color-slate-400: #6B7280;
-  --color-slate-500: #6B7280;
-  --color-slate-600: #57534e;
-  --color-slate-700: #44403c;
-  --color-slate-800: #292524;
-  --color-slate-900: #1B3A57;
-  --color-slate-950: #1c1917;
+  --color-hairline: rgba(14, 26, 43, 0.12);
+  --color-hairline-soft: rgba(14, 26, 43, 0.08);
+  --color-hairline-strong: rgba(14, 26, 43, 0.20);
+  --color-focus-halo: #DCE7F2;
+  --color-warning: #A38219;
+  --color-warning-text: #7A5E10;
+  --color-warning-bg: #F8F2DA;
+  --color-warning-border: #E5D696;
+  --color-danger: #9B2C2C;
+  --color-danger-text: #7A1F1F;
+  --color-danger-bg: #F7EAEA;
+  --color-danger-border: #E4B9B9;
+  --color-success-text: #1D6B41;
+  --color-success-bg: #E2F3E9;
+  --color-success-border: #A5D6B9;
+  --color-info-text: #24558F;
+  --color-info-bg: #E3EDFA;
+  --color-info-border: #A9C5EA;
+  --color-score-1: #2E8B57;
+  --color-score-2: #64B896;
+  --color-score-3: #E0A82E;
+  --color-score-4: #DD7A3D;
+  --color-score-5: #C8403B;
+  --color-chart-1: #2A7FF0;
+  --color-chart-2: #00A06A;
+  --color-chart-3: #DC6803;
+  --color-chart-4: #9B5DE5;
+  --color-chart-5: #E0453C;
+  --color-chart-6: #0E9CB8;
+  --color-chart-7: #7A8B00;
+  --color-chart-8: #E45C9E;
+  --color-dark-background: #0A111C;
+  --color-dark-surface: #131F2E;
+  --color-dark-text: #E6EBF2;
+  --color-dark-muted: #9BA5B5;
+  --color-dark-primary: #6096D0;
+  --color-slate-50: #FFFFFF;
+  --color-slate-100: #F4F5F8;
+  --color-slate-200: #EBEDF1;
+  --color-slate-300: #DCDFE5;
+  --color-slate-400: #616B80;
+  --color-slate-500: #5C6678;
+  --color-slate-600: #3D485C;
+  --color-slate-700: #25334A;
+  --color-slate-800: #0E1A2B;
+  --color-slate-900: #0E1A2B;
+  --color-slate-950: #0A111C;
+  --color-gray-50: #FFFFFF;
+  --color-gray-100: #F4F5F8;
+  --color-gray-200: #EBEDF1;
+  --color-gray-300: #DCDFE5;
+  --color-gray-400: #616B80;
+  --color-gray-500: #5C6678;
+  --color-gray-600: #3D485C;
+  --color-emerald-50: #EEF3F9;
+  --color-emerald-100: #DCE7F2;
+  --color-emerald-200: #A9C5EA;
+  --color-emerald-300: #6096D0;
+  --color-emerald-400: #2C5A8C;
+  --color-emerald-500: #2C5A8C;
+  --color-emerald-600: #2C5A8C;
+  --color-emerald-700: #1F3F66;
+  --color-emerald-800: #163059;
+  --color-emerald-900: #163059;
+  --color-emerald-950: #0E1A2B;
+  --color-teal-50: #DBE7E2;
+  --color-teal-100: #DBE7E2;
+  --color-teal-200: #A5D6B9;
+  --color-teal-300: #64B896;
+  --color-teal-400: #2F5D4F;
+  --color-teal-500: #2F5D4F;
+  --color-teal-600: #2F5D4F;
+  --color-teal-700: #21443A;
+  --color-teal-800: #21443A;
+  --color-teal-900: #0E1A2B;
+  --color-teal-950: #0A111C;
+  --color-amber-50: #F8F2DA;
+  --color-amber-100: #F8F2DA;
+  --color-amber-200: #E5D696;
+  --color-amber-300: #E0A82E;
+  --color-amber-400: #A38219;
+  --color-amber-500: #A38219;
+  --color-amber-600: #7A5E10;
+  --color-amber-700: #7A5E10;
+  --color-amber-800: #7A5E10;
+  --color-amber-900: #7A5E10;
+  --color-rose-50: #F7EAEA;
+  --color-rose-100: #F7EAEA;
+  --color-rose-200: #E4B9B9;
+  --color-rose-300: #DD7A3D;
+  --color-rose-400: #C8403B;
+  --color-rose-500: #9B2C2C;
+  --color-rose-600: #9B2C2C;
+  --color-rose-700: #7A1F1F;
+  --color-indigo-400: #6096D0;
+  --color-indigo-500: #2C5A8C;
+  --color-indigo-600: #1F3F66;
+  --color-indigo-700: #163059;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --text-display: 32px;
+  --text-headline-lg: 24px;
+  --text-headline-md: 19px;
+  --text-headline-sm: 16px;
+  --text-body-md: 14px;
+  --text-body-sm: 13px;
+  --text-label-md: 13px;
+  --text-label-sm: 11.5px;
+  --text-code: 12px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 6px;
+  --radius-2xl: 6px;
+  --radius-3xl: 6px;
+  --shadow-xs: 0 1px 2px rgba(14, 26, 43, 0.08);
+  --shadow-sm: 0 1px 0 rgba(14, 26, 43, 0.04), 0 1px 2px rgba(14, 26, 43, 0.06);
+  --shadow-md: 0 2px 4px rgba(14, 26, 43, 0.06), 0 8px 16px rgba(14, 26, 43, 0.06);
+  --shadow-lg: 0 2px 4px rgba(14, 26, 43, 0.06), 0 8px 16px rgba(14, 26, 43, 0.06);
+  --shadow-xl: 0 12px 32px rgba(14, 26, 43, 0.12);
+  --shadow-2xl: 0 12px 32px rgba(14, 26, 43, 0.12);
+  --shadow-inner: inset 0 1px 2px rgba(14, 26, 43, 0.08);
 }
 
 :root {
-  /* Campus Mart Design System Variables */
-  --deep-navy: #1B3A57;
-  --earth-orange: #E08856;
-  --earth-orange-hover: #c97445;
-  --ghanaian-gold: #D4A574;
-  --whatsapp-green: #25D366;
-  --warm-bg: #FDFCFB;
+  color-scheme: light;
+  --primary: #2C5A8C;
+  --primary-hover: #1F3F66;
+  --primary-pressed: #163059;
+  --primary-soft: #EEF3F9;
+  --brand: #2F5D4F;
+  --brand-dark: #21443A;
+  --brand-soft: #DBE7E2;
+  --ink: #0E1A2B;
+  --ink-700: #25334A;
+  --ink-600: #3D485C;
+  --slate: #5C6678;
+  --subtle: #616B80;
+  --well: #F4F5F8;
   --surface: #FFFFFF;
-  --success: #22C55E;
-  --error: #EF4444;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --border: #E5E7EB;
-
-  /* Legacy variables for compatibility */
-  --primary-green: #E08856;
-  --primary-green-hover: #c97445;
-  --primary-green-light: #fff7ed;
-  --accent-gold: #D4A574;
-  --accent-gold-light: #fffbeb;
-  --campus-navy: #1B3A57;
-  --campus-slate: #57534e;
-  --campus-muted: #78716c;
-  --campus-border: #E5E7EB;
-  --campus-bg: #FDFCFB;
-  --campus-card: #FFFFFF;
-  --font-heading: 'Epilogue', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --hairline: rgba(14, 26, 43, 0.12);
+  --hairline-soft: rgba(14, 26, 43, 0.08);
+  --hairline-strong: rgba(14, 26, 43, 0.20);
+  --focus-halo: #DCE7F2;
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 }
 
 @layer base {
@@ -113,10 +174,12 @@
     box-sizing: border-box;
   }
   body {
-    background-color: var(--warm-bg, #FDFCFB);
-    color: var(--deep-navy, #1B3A57);
-    letter-spacing: 0.02em;
-    font-family: var(--font-body, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+    background-color: #FFFFFF;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -126,119 +189,112 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-heading, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-    letter-spacing: -0.02em;
-    font-weight: 700;
+    font-family: var(--font-heading);
+    letter-spacing: 0;
+    font-weight: 600;
   }
   code,
   pre,
   kbd,
   samp {
-    font-family: var(--font-mono, monospace);
+    font-family: var(--font-mono);
+  }
+  input,
+  select,
+  textarea {
+    border-color: var(--hairline-strong);
+    color: var(--ink);
+    font-size: 14px;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible,
+  a:focus-visible {
+    outline: 1px solid #2C5A8C;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px var(--focus-halo);
   }
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f5f5f4;
+  background: #FFFFFF;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
-  border-radius: 9999px;
+  background: #BDC2CC;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a29e;
+  background: #8C94A3;
 }
 
-/* Glassmorphism Classes */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(214, 211, 209, 0.8);
+  background: #FFFFFF;
+  border: 1px solid var(--hairline);
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(214, 211, 209, 0.85);
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--hairline);
 }
 
 .glass-dark {
-  background: rgba(28, 25, 23, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Subtle Animated Shimmer */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  background: #131F2E;
+  border: 1px solid rgba(230, 235, 242, 0.12);
 }
 
 .shimmer-bg {
-  background: linear-gradient(90deg, #fafaf9 25%, #f5f5f4 50%, #fafaf9 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  background: var(--well);
 }
 
-/* Custom Badges */
 .badge-cedi {
-  background: #E08856;
-  color: #fffbeb;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  background: #2C5A8C;
+  color: #FFFFFF;
 }
 
 .badge-negotiable {
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #86efac;
+  background-color: #E2F3E9;
+  color: #1D6B41;
+  border: 1px solid #A5D6B9;
 }
 
 .badge-fixed {
   background-color: transparent;
-  color: #57534e;
-  border: 1px solid #d4d4d8;
+  color: #3D485C;
+  border: 1px solid var(--hairline-strong);
 }
 
-/* Campus Mart Design System Utilities */
 .gh-gradient {
-  background: linear-gradient(135deg, #1B3A57 0%, #2c4c6e 100%);
+  background: #FFFFFF;
 }
 
 .accent-gold {
-  color: #D4A574;
+  color: #2F5D4F;
 }
 
 .wa-bg {
-  background-color: #25D366;
+  background-color: #2C5A8C;
 }
 
 .wa-bg:hover {
-  background-color: #20ba59;
+  background-color: #1F3F66;
 }
 
 .earth {
-  color: #E08856;
+  color: #2C5A8C;
 }
 
 .gold {
-  color: #D4A574;
+  color: #2F5D4F;
 }
 
 .headline {
-  font-family: var(--font-heading, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif);
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
 
 /* 4px Base Unit Spacing Scale */
@@ -271,11 +327,10 @@
 
 /* Card Hover Elevation */
 .card-hover {
-  transition: all 0.25s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.06);
+  border-color: var(--hairline-strong);
 }
 
 /* Hide scrollbar for category list */
@@ -287,63 +342,70 @@
   scrollbar-width: none;
 }
 
-/* Dark mode keeps the same restrained brand accents while shifting surfaces and text. */
 .dark body {
-  background: #1c1917;
-  color: #fafaf9;
+  color-scheme: dark;
+  background: #0A111C;
+  color: #E6EBF2;
 }
 
 .dark .bg-white,
 .dark .bg-slate-50,
 .dark .bg-slate-100 {
-  background-color: #292524;
+  background-color: #131F2E;
 }
 
 .dark .bg-slate-200 {
-  background-color: #44403c;
+  background-color: #25334A;
 }
 
 .dark .text-slate-900,
 .dark .text-slate-800,
 .dark .text-slate-700 {
-  color: #fafaf9;
+  color: #E6EBF2;
 }
 
 .dark .text-slate-600,
 .dark .text-slate-500 {
-  color: #d6d3d1;
+  color: #9BA5B5;
 }
 
 .dark .text-slate-400 {
-  color: #a8a29e;
+  color: #9BA5B5;
 }
 
 .dark .border-slate-100,
 .dark .border-slate-200,
 .dark .border-slate-300 {
-  border-color: #44403c;
+  border-color: rgba(230, 235, 242, 0.12);
 }
 
 .dark input,
 .dark select,
 .dark textarea {
-  background-color: #292524;
-  color: #fafaf9;
-  border-color: #57534e;
+  background-color: #131F2E;
+  color: #E6EBF2;
+  border-color: rgba(230, 235, 242, 0.20);
 }
 
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: #a8a29e;
+  color: #9BA5B5;
 }
 
 .dark .glass-nav,
 .dark .glass-panel {
-  background: rgba(28, 25, 23, 0.94);
-  border-color: rgba(87, 83, 78, 0.8);
+  background: #131F2E;
+  border-color: rgba(230, 235, 242, 0.12);
 }
 
-.dark .card-hover,
-.dark .bg-white {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+.dark .card-hover:hover {
+  border-color: rgba(230, 235, 242, 0.20);
+}
+
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }

@@ -35,23 +35,23 @@ export const FilterToolbar: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Left: Results count & Quick Toggles */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="text-xs font-bold text-slate-700">
-              <span className="text-emerald-700 font-extrabold text-sm">{filteredItems.length}</span>{' '}
+            <span className="text-xs font-semibold text-slate-700">
+              <span className="text-ink font-semibold text-sm">{filteredItems.length}</span>{' '}
               {filteredItems.length === 1 ? 'item available' : 'items available'}
             </span>
 
             {/* Quick Toggle: Negotiable Only */}
             <button
               onClick={() => updateFilter('negotiableOnly', !filters.negotiableOnly)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+              className={`flex min-h-11 sm:min-h-0 items-center gap-1.5 px-3 py-1 sm:py-0 rounded-sm text-xs font-semibold border transition-colors ${
                 filters.negotiableOnly
-                  ? 'bg-[#E08856]/10 text-[#E08856] border-[#E08856] ring-1 ring-[#E08856]'
-                  : 'bg-white text-[#1B3A57] border-gray-200 hover:border-gray-300'
+                  ? 'bg-primary-soft text-primary border-primary'
+                  : 'bg-white text-ink-600 border-hairline-strong hover:bg-well'
               }`}
             >
               <div
                 className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                  filters.negotiableOnly ? 'border-[#E08856] bg-[#E08856]' : 'border-gray-300'
+                  filters.negotiableOnly ? 'border-primary bg-primary' : 'border-hairline-strong'
                 }`}
               >
                 {filters.negotiableOnly && <Check className="w-2.5 h-2.5 text-white" />}
@@ -62,10 +62,10 @@ export const FilterToolbar: React.FC = () => {
             {/* Expand / Collapse Advanced Filters */}
             <button
               onClick={() => setExpanded(!expanded)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+              className={`flex min-h-11 sm:min-h-0 items-center gap-1.5 px-3 py-1 sm:py-0 rounded-sm text-xs font-semibold border transition-colors ${
                 expanded
-                  ? 'bg-[#1B3A57] text-white border-[#1B3A57]'
-                  : 'bg-slate-100 text-[#1B3A57] border-gray-200 hover:bg-slate-200'
+                  ? 'bg-primary text-white border-primary'
+                  : 'bg-white text-ink-600 border-hairline-strong hover:bg-well'
               }`}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -93,7 +93,7 @@ export const FilterToolbar: React.FC = () => {
               id="sort-by-select"
               value={filters.sortBy}
               onChange={(e) => updateFilter('sortBy', e.target.value as any)}
-              className="min-w-0 flex-1 sm:flex-none text-xs font-semibold bg-slate-50 border border-gray-200 rounded-lg px-2.5 py-2 text-[#1B3A57] focus:outline-none focus:ring-1 focus:ring-[#E08856] cursor-pointer"
+              className="min-w-0 flex-1 sm:flex-none text-xs font-semibold bg-white border border-hairline-strong rounded-sm px-2.5 py-1.5 text-ink focus:outline-none focus:border-primary focus:ring-2 focus:ring-focus-halo cursor-pointer"
             >
               <option value="newest">Recently Posted</option>
               <option value="price-asc">Price: Low to High (GH₵)</option>
@@ -108,8 +108,8 @@ export const FilterToolbar: React.FC = () => {
           <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in slide-in-from-top-2 duration-150">
             {/* Price Range (in GH₵) */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#1B3A57] flex items-center gap-1">
-                <Tag className="w-3.5 h-3.5 text-[#E08856]" />
+              <label className="text-sm font-medium text-ink flex items-center gap-1">
+                <Tag className="w-3.5 h-3.5 text-primary" />
                 <span>Price Range (GH₵)</span>
               </label>
               <div className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export const FilterToolbar: React.FC = () => {
                   placeholder="Min GH₵"
                   value={filters.minPrice}
                   onChange={(e) => updateFilter('minPrice', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-md focus:border-[#E08856] focus:outline-none"
+                  className="w-full text-sm px-2.5 py-1.5 border border-hairline-strong rounded-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus-halo"
                 />
                 <span className="text-gray-400 text-xs">-</span>
                 <input
@@ -126,21 +126,21 @@ export const FilterToolbar: React.FC = () => {
                   placeholder="Max GH₵"
                   value={filters.maxPrice}
                   onChange={(e) => updateFilter('maxPrice', e.target.value === '' ? '' : Number(e.target.value))}
-                  className="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-md focus:border-[#E08856] focus:outline-none"
+                  className="w-full text-sm px-2.5 py-1.5 border border-hairline-strong rounded-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus-halo"
                 />
               </div>
             </div>
 
             {/* Condition Filter */}
             <div className="space-y-1.5">
-              <label htmlFor="condition-select" className="text-xs font-bold text-slate-700">
+              <label htmlFor="condition-select" className="text-sm font-medium text-ink">
                 Item Condition
               </label>
               <select
                 id="condition-select"
                 value={filters.condition}
                 onChange={(e) => updateFilter('condition', e.target.value as ItemCondition | 'all')}
-                className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-md focus:border-emerald-500 focus:outline-none bg-white"
+                className="w-full text-sm px-2.5 py-1.5 border border-hairline-strong rounded-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus-halo bg-white"
               >
                 <option value="all">All Conditions</option>
                 <option value="brand-new">Brand New (Unopened)</option>
@@ -152,8 +152,8 @@ export const FilterToolbar: React.FC = () => {
 
             {/* Specific Hall / Hostel Filter */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#1B3A57] flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-[#D4A574]" />
+              <label className="text-sm font-medium text-ink flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-primary" />
                 <span>Hostel / Campus Hall</span>
               </label>
               <input
@@ -161,7 +161,7 @@ export const FilterToolbar: React.FC = () => {
                 placeholder={selectedUni ? `e.g. ${selectedUni.popularHostels[0] || 'Hall'}` : 'e.g. Pentagon, TF, Brunei...'}
                 value={filters.locationQuery}
                 onChange={(e) => updateFilter('locationQuery', e.target.value)}
-                className="w-full text-xs px-2.5 py-1.5 border border-gray-200 rounded-md focus:border-[#E08856] focus:outline-none"
+                className="w-full text-sm px-2.5 py-1.5 border border-hairline-strong rounded-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-focus-halo"
               />
             </div>
 
@@ -176,8 +176,8 @@ export const FilterToolbar: React.FC = () => {
                       onClick={() => updateFilter('locationQuery', filters.locationQuery === hostel ? '' : hostel)}
                       className={`text-[11px] px-2.5 py-1 rounded-md border transition-colors ${
                         filters.locationQuery === hostel
-                          ? 'bg-[#D4A574]/10 text-[#D4A574] border-[#D4A574] font-bold'
-                          : 'bg-slate-50 text-[#1B3A57] border-gray-200 hover:bg-slate-100'
+                          ? 'bg-primary-soft text-on-primary-soft border-primary font-semibold'
+                          : 'bg-white text-ink-600 border-hairline-strong hover:bg-well'
                       }`}
                     >
                       {hostel}

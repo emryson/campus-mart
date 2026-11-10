@@ -302,7 +302,7 @@ export const PostItemModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-ink/28 animate-in fade-in duration-200">
       {/* Modal Container */}
       <div 
         className="relative bg-white w-full max-w-3xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 flex flex-col max-h-[92vh]"
@@ -331,12 +331,12 @@ export const PostItemModal: React.FC = () => {
 
         {/* Success Overlay Toast */}
         {showSuccessToast && (
-          <div className="absolute inset-0 z-30 bg-emerald-950/85 backdrop-blur-md flex flex-col items-center justify-center text-white p-6 text-center animate-in zoom-in-95 duration-200">
-            <div className="w-16 h-16 rounded-full bg-emerald-500 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/40">
-              <Check className="w-8 h-8 text-white stroke-[3]" />
+          <div className="absolute inset-0 z-30 bg-white/95 flex flex-col items-center justify-center text-ink p-6 text-center animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 rounded-full bg-success-bg text-success-text flex items-center justify-center mb-4">
+              <Check className="w-8 h-8 stroke-[3]" />
             </div>
-            <h3 className="text-2xl font-black mb-1">Listing Published!</h3>
-            <p className="text-emerald-200 text-sm max-w-md">
+            <h3 className="text-xl font-semibold mb-1">Listing published</h3>
+            <p className="text-slate-600 text-sm max-w-md">
               Your item is now live on CampusMart for students at {selectedUni.name} to discover.
             </p>
           </div>
@@ -781,7 +781,7 @@ export const PostItemModal: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-600/20 disabled:opacity-50 transition-all transform hover:-translate-y-0.5"
+              className="flex min-h-11 items-center gap-2 px-4 bg-primary hover:bg-primary-hover text-white font-semibold text-xs sm:text-sm rounded-md disabled:opacity-45 transition-colors"
             >
               <Sparkles className="w-4 h-4" />
               <span>{isSubmitting ? 'Publishing...' : 'Publish Campus Listing'}</span>

@@ -10,10 +10,27 @@ export async function POST(request: Request) {
 
   const body = await request.json();
   const activityType = typeof body.type === 'string' ? body.type.trim() : '';
-  if (!activityType || activityType.length > 80) {
+  const allowedTypes = new Set([
+    'login',
+    'login_failed',
+    'logout',
+    'signup',
+    'listing_created',
+    'listing_deleted',
+    'admin_listing_deleted',
+    'admin_login',
+    'admin_login_failed',
+    'saved_item_toggled',
+  ]);
+
+  if (!activityType || activityType.length > 80 || !allowedTypes.has(activityType)) {
     return NextResponse.json({ error: 'A valid activity type is required.' }, { status: 400 });
   }
 
-  logActivity(user.id, activityType, typeof body.metadata === 'object' ? body.metadata : {});
+  const metadata = typeof body.metadata === 'object' && body.metadata !== null && !Array.isArray(body.metadata)
+    ? body.metadata as Record<string, unknown>
+    : {};
+
+  logActivity(user.id, activityType, metadata);
   return NextResponse.json({ success: true }, { status: 201 });
 }

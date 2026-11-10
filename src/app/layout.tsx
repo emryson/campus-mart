@@ -1,21 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+import '@fontsource-variable/inter';
+import '@fontsource/ibm-plex-mono/400.css';
 import './globals.css';
 import { MarketProvider } from '@/context/MarketContext';
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-body',
-  display: 'swap',
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-mono',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: 'CampusMart Ghana | Peer-to-Peer Student Marketplace',
@@ -41,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${jetBrainsMono.variable}`}>
-      <body className="min-h-screen bg-[#FDFCFB] text-[#1B3A57] antialiased selection:bg-[#E08856] selection:text-white">
+    <html lang="en">
+      <body className="min-h-screen bg-white text-ink antialiased selection:bg-primary selection:text-white">
         <MarketProvider>
           {children}
         </MarketProvider>

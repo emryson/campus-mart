@@ -110,36 +110,32 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Hero Panel */}
-      <div className="relative hidden lg:flex lg:w-[45%] xl:w-[48%] flex-col justify-between p-10 xl:p-14 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-emerald-500/10 blur-3xl" />
-        <div className="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-teal-500/8 blur-3xl" />
-        <div className="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-emerald-400/5 blur-2xl" />
+      <div className="relative hidden lg:flex lg:w-[45%] xl:w-[48%] flex-col justify-between p-10 xl:p-14 bg-white border-r border-hairline overflow-hidden">
 
         {/* Logo & Back */}
         <div className="relative z-10">
-          <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-medium transition-colors mb-10 group">
+          <Link href="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-primary text-sm font-medium transition-colors mb-10 group">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Marketplace
           </Link>
 
           <div className="flex items-center gap-3 mb-6">
-            <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-lg shadow-emerald-500/30 shrink-0">
+            <div className="relative w-12 h-12 rounded-md overflow-hidden shrink-0">
               <Image src="/images/logo.png" alt="CampusMart logo" fill sizes="48px" className="object-contain" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-white tracking-tight">CampusMart</h1>
-              <p className="text-xs font-medium text-emerald-400/80">Ghana&apos;s #1 Student Marketplace</p>
+              <h1 className="text-2xl font-semibold text-ink">CampusMart</h1>
+              <p className="text-xs font-medium text-slate-600">Student marketplace in Ghana</p>
             </div>
           </div>
 
-          <h2 className="text-3xl xl:text-4xl font-black text-white leading-tight mt-8">
+          <h2 className="text-2xl font-semibold text-ink leading-tight mt-8">
             Buy & sell on your
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
+            <span className="block text-ink">
               university campus
             </span>
           </h2>
-          <p className="text-sm text-slate-400 mt-4 leading-relaxed max-w-sm">
+          <p className="text-sm text-slate-600 mt-4 leading-relaxed max-w-sm">
             Join thousands of students across 28+ Ghanaian universities trading textbooks, electronics, dorm essentials & more — safely and affordably.
           </p>
         </div>
@@ -151,9 +147,9 @@ export default function LoginPage() {
             { icon: Sparkles, label: 'Post items in under 60 seconds' },
             { icon: CheckCircle2, label: 'Prices in GH₵ — no hidden fees' },
           ].map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-3 text-sm text-slate-300">
-              <span className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center flex-shrink-0">
-                <Icon className="w-4 h-4 text-emerald-400" />
+            <div key={label} className="flex items-center gap-3 text-sm text-slate-600">
+              <span className="w-8 h-8 rounded-sm bg-brand-soft border border-success-border flex items-center justify-center flex-shrink-0">
+                <Icon className="w-4 h-4 text-brand-dark" />
               </span>
               {label}
             </div>
@@ -162,7 +158,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Auth Form Panel */}
-      <div className="flex-1 flex flex-col items-center justify-center px-5 py-8 sm:px-8 lg:px-12 xl:px-16 bg-slate-50 relative overflow-y-auto">
+      <div className="flex-1 flex flex-col items-center justify-center px-5 py-8 sm:px-8 lg:px-12 xl:px-16 bg-white relative overflow-y-auto">
         {/* Mobile back link */}
         <div className="w-full max-w-md lg:hidden mb-6">
           <Link href="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors group">
@@ -174,12 +170,12 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md shrink-0">
+            <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0">
               <Image src="/images/logo.png" alt="CampusMart logo" fill sizes="40px" className="object-contain" />
             </div>
             <div>
-              <h1 className="text-lg font-black text-slate-900">CampusMart</h1>
-              <p className="text-[10px] font-semibold text-emerald-600">Student Marketplace</p>
+              <h1 className="text-lg font-semibold text-ink">CampusMart</h1>
+              <p className="text-[10px] font-semibold text-brand-dark">Student marketplace</p>
             </div>
           </div>
 
@@ -191,23 +187,23 @@ export default function LoginPage() {
           </div>
 
           {/* Tab Toggle */}
-          <div className="flex bg-slate-200/70 rounded-xl p-1 mb-6">
+          <div className="flex border-b border-hairline mb-6">
             <button
               onClick={() => { setTab('login'); setError(null); }}
-              className={`flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all ${
+              className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold border-b-2 transition-colors ${
                 tab === 'login'
-                  ? 'bg-white text-emerald-800 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'text-primary border-primary'
+                  : 'text-slate-600 border-transparent hover:text-ink'
               }`}
             >
               Sign In
             </button>
             <button
               onClick={() => { setTab('signup'); setError(null); }}
-              className={`flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all ${
+              className={`flex-1 py-2.5 text-xs sm:text-sm font-semibold border-b-2 transition-colors ${
                 tab === 'signup'
-                  ? 'bg-white text-emerald-800 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'text-primary border-primary'
+                  : 'text-slate-600 border-transparent hover:text-ink'
               }`}
             >
               Create Account
@@ -275,7 +271,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm rounded-xl shadow-md shadow-emerald-600/15 hover:shadow-lg hover:shadow-emerald-600/25 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-11 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-md transition-colors active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
@@ -446,7 +442,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm rounded-xl shadow-md shadow-emerald-600/15 hover:shadow-lg hover:shadow-emerald-600/25 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-11 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-md transition-colors active:scale-[0.98] disabled:opacity-45 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">

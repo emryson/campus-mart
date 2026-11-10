@@ -96,33 +96,33 @@ export const AuthModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-ink/28 animate-in fade-in duration-200">
       <div 
         className="relative bg-white w-full max-w-lg rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white p-6 relative">
+        <div className="bg-white text-ink p-6 relative border-b border-hairline">
           <button
             onClick={closeAuthModal}
-            className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors"
+            className="absolute top-4 right-4 p-1.5 text-slate-500 hover:text-ink rounded-sm hover:bg-well transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
 
           <div className="flex items-center gap-2 mb-2">
-            <span className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center">
+            <span className="w-8 h-8 rounded-sm bg-primary-soft border border-hairline text-primary flex items-center justify-center">
               <Lock className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            <span className="text-xs font-semibold text-slate-600">
               Campus Security
             </span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black text-white">
+          <h2 className="text-xl sm:text-2xl font-semibold text-ink">
             Student Login Required
           </h2>
-          <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+          <p className="text-xs text-slate-600 mt-1 leading-relaxed">
             To ensure trust and prevent scam listings, <strong>only verified university students</strong> can post items for sale on CampusMart.
           </p>
         </div>
@@ -214,7 +214,7 @@ export const AuthModal: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm rounded-xl shadow-md transition-all active:scale-98"
+                className="w-full min-h-11 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-md transition-colors active:scale-98"
               >
                 Sign In & Continue Posting
               </button>
@@ -344,7 +344,7 @@ export const AuthModal: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
+                className="w-full min-h-11 bg-primary hover:bg-primary-hover text-white font-semibold text-xs sm:text-sm rounded-md transition-colors active:scale-98"
               >
                 Create Account & Post Item
               </button>

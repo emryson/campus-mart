@@ -98,6 +98,9 @@ database.exec(`
     UNIQUE (school_id, username)
   );
 
+  CREATE UNIQUE INDEX IF NOT EXISTS users_school_id_username_ci_idx
+    ON users (LOWER(school_id), LOWER(username));
+
   CREATE TABLE IF NOT EXISTS sessions (
     token TEXT PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -156,6 +159,46 @@ try {
 } catch {
   // Existing databases already have the role column.
 }
+
+export const normalizeAccountIdentifier = (value: string) => value.trim().toLowerCase();
+
+export const sanitizeActivityMetadata = (metadata: Record<string, unknown> = {}) => {
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) return {};
+
+  const sanitized: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(metadata)) {
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null) {
+      sanitized[key] = value;
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      sanitized[key] = value
+        .filter((item) => typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean' || item === null)
+        .slice(0, 10);
+      continue;
+    }
+
+    if (typeof value === 'object') {
+      sanitized[key] = JSON.stringify(value);
+    }
+  }
+
+  return sanitized;
+};
+
+const ALLOWED_ACTIVITY_TYPES = new Set([
+  'login',
+  'login_failed',
+  'logout',
+  'signup',
+  'listing_created',
+  'listing_deleted',
+  'admin_listing_deleted',
+  'admin_login',
+  'admin_login_failed',
+  'saved_item_toggled',
+]);
 
 const toStudentUser = (row: UserRow): StudentUser => ({
   id: row.id,
@@ -326,6 +369,8 @@ export const createUser = (input: {
   const userId = `user-${crypto.randomUUID()}`;
   const createdAt = new Date().toISOString();
   const passwordHash = bcrypt.hashSync(input.password, 12);
+  const normalizedSchoolId = normalizeAccountIdentifier(input.schoolId);
+  const normalizedUsername = normalizeAccountIdentifier(input.username);
 
   database.prepare(`
     INSERT INTO users (
@@ -336,8 +381,8 @@ export const createUser = (input: {
   `).run(
     userId,
     input.role || 'student',
-    input.schoolId,
-    input.username,
+    normalizedSchoolId,
+    normalizedUsername,
     passwordHash,
     input.name,
     input.email,
@@ -356,9 +401,12 @@ export const createUser = (input: {
 };
 
 export const authenticateUser = (schoolId: string, username: string, password: string) => {
+  const normalizedSchoolId = normalizeAccountIdentifier(schoolId);
+  const normalizedUsername = normalizeAccountIdentifier(username);
+
   const row = database.prepare(
     'SELECT * FROM users WHERE lower(school_id) = lower(?) AND lower(username) = lower(?)',
-  ).get(schoolId, username) as (UserRow & { password_hash: string }) | undefined;
+  ).get(normalizedSchoolId, normalizedUsername) as (UserRow & { password_hash: string }) | undefined;
 
   if (!row || !bcrypt.compareSync(password, row.password_hash)) return null;
   return toStudentUser(row);
@@ -369,7 +417,9 @@ export const authenticateAdmin = (username: string, password: string) => {
   const adminUsername = process.env.ADMIN_USERNAME;
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminSchoolId || !adminUsername || !adminPassword) return null;
-  if (username !== adminUsername || password !== adminPassword) return null;
+  const normalizedUsername = normalizeAccountIdentifier(username);
+  const normalizedAdminUsername = normalizeAccountIdentifier(adminUsername);
+  if (normalizedUsername !== normalizedAdminUsername || password !== adminPassword) return null;
 
   const existing = database.prepare("SELECT * FROM users WHERE role = 'admin' LIMIT 1").get() as UserRow | undefined;
   if (existing) return toStudentUser(existing);
@@ -463,15 +513,21 @@ export const logActivity = (
   activityType: string,
   metadata: Record<string, unknown> = {},
 ) => {
+  if (!ALLOWED_ACTIVITY_TYPES.has(activityType)) {
+    return false;
+  }
+
   database.prepare(
     'INSERT INTO activities (id, user_id, activity_type, metadata, created_at) VALUES (?, ?, ?, ?, ?)',
   ).run(
     `activity-${crypto.randomUUID()}`,
     userId,
     activityType,
-    JSON.stringify(metadata),
+    JSON.stringify(sanitizeActivityMetadata(metadata)),
     new Date().toISOString(),
   );
+
+  return true;
 };
 
 export const sessionCookieOptions = (expiresAt: string) => ({

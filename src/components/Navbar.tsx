@@ -76,11 +76,11 @@ export const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 w-full glass-nav shadow-xs">
       {/* Top micro-bar for university selection */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-1.5 px-4 sm:px-8 border-b border-slate-800">
+      <div className="bg-white text-slate-600 text-xs py-1.5 px-4 sm:px-8 border-b border-hairline">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="inline-flex items-center gap-1 font-medium text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="inline-flex items-center gap-1 font-medium text-brand-dark">
+              <span className="w-2 h-2 rounded-full bg-brand"></span>
               Live Campus Trading
             </span>
             <span className="hidden sm:inline text-slate-500">•</span>
@@ -90,15 +90,15 @@ export const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label htmlFor="campus-select" className="text-slate-400 flex items-center gap-1 cursor-pointer">
-              <GraduationCap className="w-3.5 h-3.5 text-amber-400" />
+            <label htmlFor="campus-select" className="text-slate-600 flex items-center gap-1 cursor-pointer">
+              <GraduationCap className="w-3.5 h-3.5 text-primary" />
               <span>Campus:</span>
             </label>
             <select
               id="campus-select"
               value={selectedUniversityId}
               onChange={(e) => setSelectedUniversityId(e.target.value as UniversityId)}
-              className="min-w-0 flex-1 sm:flex-none bg-slate-800 text-white text-xs font-semibold rounded-md px-2 py-1.5 border border-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+              className="min-w-0 flex-1 sm:flex-none bg-white text-ink text-xs font-semibold rounded-sm px-2.5 py-1.5 border border-hairline-strong focus:outline-none focus:border-primary focus:ring-2 focus:ring-focus-halo cursor-pointer"
             >
               <option value="all">🇬🇭 All Universities in Ghana</option>
               {UNIVERSITIES.map((uni) => (
@@ -115,15 +115,15 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between gap-3">
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-900/20 shrink-0">
+          <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0">
             <Image src="/images/logo.png" alt="CampusMart logo" fill sizes="40px" className="object-contain" />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="headline font-extrabold text-xl sm:text-2xl md:text-3xl tracking-tight text-[#1B3A57]">
-                Campus<span className="text-[#D4A574]">Mart</span>
+              <span className="headline font-semibold text-xl sm:text-2xl text-ink">
+                Campus<span className="text-brand-dark">Mart</span>
               </span>
-              <span className="hidden sm:inline bg-amber-100 text-amber-800 font-bold text-[10px] px-1.5 py-0.5 rounded tracking-wide uppercase border border-amber-200">
+              <span className="hidden sm:inline bg-info-bg text-info-text font-semibold text-[10px] px-1.5 py-0.5 rounded-sm border border-info-border">
                 Ghana
               </span>
             </div>
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
             placeholder="Search laptops, mini-fridges, calculators, textbooks..."
             value={filters.searchQuery}
             onChange={(e) => updateFilter('searchQuery', e.target.value)}
-            className="w-full pl-10 pr-9 py-2 text-sm bg-slate-100/90 hover:bg-slate-100 focus:bg-white rounded-full border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all placeholder:text-slate-400"
+            className="w-full pl-10 pr-9 py-2 text-sm bg-white hover:bg-well focus:bg-white rounded-sm border border-hairline-strong focus:border-primary focus:ring-2 focus:ring-focus-halo outline-none transition-colors placeholder:text-slate-500"
           />
           {filters.searchQuery && (
             <button
@@ -160,7 +160,7 @@ export const Navbar: React.FC = () => {
         <div className="hidden lg:flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-ink hover:bg-well rounded-sm transition-colors dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800"
             title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
@@ -171,10 +171,10 @@ export const Navbar: React.FC = () => {
           {/* Safety Button */}
           <button
             onClick={openSafetyModal}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-brand-dark hover:bg-brand-soft rounded-sm transition-colors"
             title="Campus Safety Tips"
           >
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <ShieldCheck className="w-4 h-4 text-brand" />
             <span>Safety Guide</span>
           </button>
 
@@ -211,7 +211,7 @@ export const Navbar: React.FC = () => {
           {/* Post Item CTA Button */}
           <button
             onClick={openPostModal}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm rounded-full shadow-md shadow-emerald-600/20 hover:shadow-lg hover:shadow-emerald-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+            className="flex items-center gap-2 px-4 h-8 bg-primary hover:bg-primary-hover text-white font-semibold text-xs sm:text-sm rounded-md transition-colors"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Post an Item</span>
@@ -222,10 +222,10 @@ export const Navbar: React.FC = () => {
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                className="flex items-center gap-2 px-2.5 py-1.5 rounded-full border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all"
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-md border border-hairline-strong hover:border-primary hover:bg-primary-soft transition-colors"
                 title={currentUser.name}
               >
-                <span className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[11px] font-black uppercase flex-shrink-0">
+                <span className="w-7 h-7 rounded-full bg-brand text-white flex items-center justify-center text-[11px] font-semibold uppercase flex-shrink-0">
                   {currentUser.name.charAt(0)}
                 </span>
                 <span className="text-xs font-semibold text-slate-700 max-w-[80px] truncate hidden xl:block">
@@ -377,7 +377,7 @@ export const Navbar: React.FC = () => {
             {currentUser ? (
               <div>
                 <div className="flex items-center gap-2.5 py-2">
-                  <span className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xs font-black uppercase flex-shrink-0">
+                  <span className="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-white text-xs font-semibold uppercase flex-shrink-0">
                     {currentUser.name.charAt(0)}
                   </span>
                   <div className="min-w-0">

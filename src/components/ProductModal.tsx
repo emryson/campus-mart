@@ -86,14 +86,14 @@ export const ProductModal: React.FC = () => {
   )}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-ink/28 animate-in fade-in duration-200">
       {/* Modal Container */}
       <div 
         className="relative bg-white w-full max-w-4xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-6 border border-slate-200 flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header bar - Sticky on mobile */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-slate-100 bg-slate-50/70 backdrop-blur-md">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-hairline-soft bg-white">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200 truncate">
               {activeItem.universityName}
@@ -157,8 +157,8 @@ export const ProductModal: React.FC = () => {
 
                 {/* Sold Banner */}
                 {activeItem.isSold && (
-                  <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center">
-                    <span className="bg-rose-600 text-white font-extrabold text-base tracking-widest uppercase px-6 py-2 rounded-lg shadow-xl transform -rotate-3">
+                  <div className="absolute inset-0 bg-ink/60 flex items-center justify-center">
+                    <span className="bg-danger text-white font-semibold text-base px-6 py-2 rounded-sm">
                       This Item Is Sold
                     </span>
                   </div>
@@ -169,14 +169,14 @@ export const ProductModal: React.FC = () => {
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/60 hover:bg-slate-900/80 text-white backdrop-blur-md flex items-center justify-center transition-transform active:scale-95"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-ink/80 hover:bg-ink text-white flex items-center justify-center transition-colors active:scale-95"
                       aria-label="Previous photo"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/60 hover:bg-slate-900/80 text-white backdrop-blur-md flex items-center justify-center transition-transform active:scale-95"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-ink/80 hover:bg-ink text-white flex items-center justify-center transition-colors active:scale-95"
                       aria-label="Next photo"
                     >
                       <ChevronRight className="w-5 h-5" />
@@ -185,7 +185,7 @@ export const ProductModal: React.FC = () => {
                 )}
 
                 {/* Photo indicator */}
-                <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-slate-900/70 backdrop-blur-md text-white text-xs font-semibold">
+                <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-sm bg-ink/80 text-white text-xs font-semibold">
                   Photo {activeImageIndex + 1} of {images.length} (Max 5)
                 </div>
               </div>
@@ -276,7 +276,7 @@ export const ProductModal: React.FC = () => {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all active:scale-98"
+                    className="flex min-h-11 items-center justify-center gap-2 px-4 bg-primary hover:bg-primary-hover text-white font-semibold text-xs sm:text-sm rounded-md transition-colors active:scale-98"
                   >
                     <MessageSquare className="w-4 h-4 fill-white" />
                     <span>Chat on WhatsApp</span>
